@@ -16,7 +16,9 @@ struct MainTabView: View {
                 ProfileView()
                     .tag(2)
             }
+            #if os(iOS)
             .tabViewStyle(.page(indexDisplayMode: .never))
+            #endif
             
             // Custom Tab Bar
             CustomTabBar(selectedTab: $selectedTab)

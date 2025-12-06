@@ -5,26 +5,467 @@
 	};
 	objectVersion = 56;
 	objects = {
-		{
-			isa = PBXBuildFile;
-			fileRef = /* CosmoViewApp.swift */;
+
+/* Begin PBXBuildFile section */
+		A10001001C00000000000001 /* CosmoViewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002001C00000000000001 /* CosmoViewApp.swift */; };
+		A10001011C00000000000001 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002011C00000000000001 /* Models.swift */; };
+		A10001021C00000000000001 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002021C00000000000001 /* APIService.swift */; };
+		A10001031C00000000000001 /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002031C00000000000001 /* AuthenticationManager.swift */; };
+		A10001041C00000000000001 /* APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002041C00000000000001 /* APIConfig.swift */; };
+		A10001051C00000000000001 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002051C00000000000001 /* HomeViewModel.swift */; };
+		A10001061C00000000000001 /* PostDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002061C00000000000001 /* PostDetailViewModel.swift */; };
+		A10001071C00000000000001 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002071C00000000000001 /* LoginView.swift */; };
+		A10001081C00000000000001 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002081C00000000000001 /* RegisterView.swift */; };
+		A10001091C00000000000001 /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10002091C00000000000001 /* FavoritesView.swift */; };
+		A100010A1C00000000000001 /* APODView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020A1C00000000000001 /* APODView.swift */; };
+		A100010B1C00000000000001 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020B1C00000000000001 /* HomeView.swift */; };
+		A100010C1C00000000000001 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020C1C00000000000001 /* PostDetailView.swift */; };
+		A100010D1C00000000000001 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020D1C00000000000001 /* MainTabView.swift */; };
+		A100010E1C00000000000001 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020E1C00000000000001 /* ChangePasswordView.swift */; };
+		A100010F1C00000000000001 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020F1C00000000000001 /* ProfileView.swift */; };
+		A10001101C00000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10002101C00000000000001 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000001C00000000000001 /* CosmoView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CosmoView.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10002001C00000000000001 /* CosmoViewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CosmoViewApp.swift; sourceTree = "<group>"; };
+		A10002011C00000000000001 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		A10002021C00000000000001 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		A10002031C00000000000001 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		A10002041C00000000000001 /* APIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfig.swift; sourceTree = "<group>"; };
+		A10002051C00000000000001 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		A10002061C00000000000001 /* PostDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewModel.swift; sourceTree = "<group>"; };
+		A10002071C00000000000001 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		A10002081C00000000000001 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		A10002091C00000000000001 /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
+		A100020A1C00000000000001 /* APODView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APODView.swift; sourceTree = "<group>"; };
+		A100020B1C00000000000001 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		A100020C1C00000000000001 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
+		A100020D1C00000000000001 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		A100020E1C00000000000001 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
+		A100020F1C00000000000001 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A10002101C00000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10003001C00000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		{
-			isa = PBXBuildFile;
-			fileRef = /* ContentView.swift */;
-		};
-		{
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10004001C00000000000001 = {
 			isa = PBXGroup;
 			children = (
-				/* Models */,
-				/* Views */,
-				/* ViewModels */,
-				/* Services */,
-				/* Utilities */,
+				A10004011C00000000000001 /* CosmoView */,
+				A10004021C00000000000001 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10004011C00000000000001 /* CosmoView */ = {
+			isa = PBXGroup;
+			children = (
+				A10002001C00000000000001 /* CosmoViewApp.swift */,
+				A10004031C00000000000001 /* Models */,
+				A10004041C00000000000001 /* Services */,
+				A10004051C00000000000001 /* ViewModels */,
+				A10004061C00000000000001 /* Views */,
+				A10004071C00000000000001 /* Utilities */,
+				A10002101C00000000000001 /* Assets.xcassets */,
 			);
 			path = CosmoView;
 			sourceTree = "<group>";
 		};
+		A10004021C00000000000001 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10000001C00000000000001 /* CosmoView.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10004031C00000000000001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10002011C00000000000001 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A10004041C00000000000001 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A10002021C00000000000001 /* APIService.swift */,
+				A10002031C00000000000001 /* AuthenticationManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A10004051C00000000000001 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A10002051C00000000000001 /* HomeViewModel.swift */,
+				A10002061C00000000000001 /* PostDetailViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		A10004061C00000000000001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A10004081C00000000000001 /* Auth */,
+				A10004091C00000000000001 /* Home */,
+				A100040A1C00000000000001 /* Favorites */,
+				A100040B1C00000000000001 /* Profile */,
+				A100020D1C00000000000001 /* MainTabView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A10004071C00000000000001 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A10002041C00000000000001 /* APIConfig.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A10004081C00000000000001 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A10002071C00000000000001 /* LoginView.swift */,
+				A10002081C00000000000001 /* RegisterView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		A10004091C00000000000001 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A100020A1C00000000000001 /* APODView.swift */,
+				A100020B1C00000000000001 /* HomeView.swift */,
+				A100020C1C00000000000001 /* PostDetailView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		A100040A1C00000000000001 /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				A10002091C00000000000001 /* FavoritesView.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
+		A100040B1C00000000000001 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A100020E1C00000000000001 /* ChangePasswordView.swift */,
+				A100020F1C00000000000001 /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10005001C00000000000001 /* CosmoView */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10006001C00000000000001 /* Build configuration list for PBXNativeTarget "CosmoView" */;
+			buildPhases = (
+				A10005011C00000000000001 /* Sources */,
+				A10003001C00000000000001 /* Frameworks */,
+				A10005021C00000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CosmoView;
+			productName = CosmoView;
+			productReference = A10000001C00000000000001 /* CosmoView.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10007001C00000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					A10005001C00000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A10008001C00000000000001 /* Build configuration list for PBXProject "CosmoView" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10004001C00000000000001;
+			productRefGroup = A10004021C00000000000001 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10005001C00000000000001 /* CosmoView */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10005021C00000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10001101C00000000000001 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10005011C00000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10001001C00000000000001 /* CosmoViewApp.swift in Sources */,
+				A10001011C00000000000001 /* Models.swift in Sources */,
+				A10001021C00000000000001 /* APIService.swift in Sources */,
+				A10001031C00000000000001 /* AuthenticationManager.swift in Sources */,
+				A10001041C00000000000001 /* APIConfig.swift in Sources */,
+				A10001051C00000000000001 /* HomeViewModel.swift in Sources */,
+				A10001061C00000000000001 /* PostDetailViewModel.swift in Sources */,
+				A10001071C00000000000001 /* LoginView.swift in Sources */,
+				A10001081C00000000000001 /* RegisterView.swift in Sources */,
+				A10001091C00000000000001 /* FavoritesView.swift in Sources */,
+				A100010A1C00000000000001 /* APODView.swift in Sources */,
+				A100010B1C00000000000001 /* HomeView.swift in Sources */,
+				A100010C1C00000000000001 /* PostDetailView.swift in Sources */,
+				A100010D1C00000000000001 /* MainTabView.swift in Sources */,
+				A100010E1C00000000000001 /* ChangePasswordView.swift in Sources */,
+				A100010F1C00000000000001 /* ProfileView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10009001C00000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+			};
+			name = Debug;
+		};
+		A100090A1C00000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+			};
+			name = Release;
+		};
+		A100090B1C00000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cosmoview.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A100090C1C00000000000001 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cosmoview.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10006001C00000000000001 /* Build configuration list for PBXNativeTarget "CosmoView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A100090B1C00000000000001 /* Debug */,
+				A100090C1C00000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10008001C00000000000001 /* Build configuration list for PBXProject "CosmoView" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10009001C00000000000001 /* Debug */,
+				A100090A1C00000000000001 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
 	};
-	rootObject = /* Project object */;
+	rootObject = A10007001C00000000000001 /* Project object */;
 }

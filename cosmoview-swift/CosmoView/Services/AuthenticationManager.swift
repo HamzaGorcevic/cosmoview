@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import Combine
 
 class AuthenticationManager: ObservableObject {
     static let shared = AuthenticationManager()
