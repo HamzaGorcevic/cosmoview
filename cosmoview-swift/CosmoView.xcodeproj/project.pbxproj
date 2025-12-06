@@ -1,0 +1,30 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		{
+			isa = PBXBuildFile;
+			fileRef = /* CosmoViewApp.swift */;
+		};
+		{
+			isa = PBXBuildFile;
+			fileRef = /* ContentView.swift */;
+		};
+		{
+			isa = PBXGroup;
+			children = (
+				/* Models */,
+				/* Views */,
+				/* ViewModels */,
+				/* Services */,
+				/* Utilities */,
+			);
+			path = CosmoView;
+			sourceTree = "<group>";
+		};
+	};
+	rootObject = /* Project object */;
+}

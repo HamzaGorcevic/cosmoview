@@ -1,0 +1,47 @@
+### Create Comment
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+    "userId": "67759c60-6b97-4c7c-9195-be7be551c821",
+    "postId": "35e11cfc-a40c-495c-a5ce-6b805ca64c2c",
+    "content": "This is a test comment"
+}
+
+### Create Reply to Comment
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+    "userId": "67759c60-6b97-4c7c-9195-be7be551c821",
+    "postId": "35e11cfc-a40c-495c-a5ce-6b805ca64c2c",
+    "content": "This is a reply to a comment",
+    "parentId": "e1e86056-0896-4302-a12e-d7ed15429a17"
+}
+
+### Get Post Comments
+GET http://localhost:3000/comments/post/35e11cfc-a40c-495c-a5ce-6b805ca64c2c
+
+### Get Comment Replies
+GET http://localhost:3000/comments/comment/e1e86056-0896-4302-a12e-d7ed15429a17/replies
+
+### Get Single Comment
+GET http://localhost:3000/comments/e1e86056-0896-4302-a12e-d7ed15429a17
+
+### Update Comment
+PUT http://localhost:3000/comments/e1e86056-0896-4302-a12e-d7ed15429a17
+Content-Type: application/json
+
+{
+    "userId": "67759c60-6b97-4c7c-9195-be7be551c821",
+    "content": "Updated comment content"
+}
+
+### Delete Comment
+DELETE http://localhost:3000/comments/e1e86056-0896-4302-a12e-d7ed15429a17
+Content-Type: application/json
+
+{
+    "userId": "67759c60-6b97-4c7c-9195-be7be551c821",
+    "isAdmin": false
+}

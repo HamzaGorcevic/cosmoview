@@ -1,0 +1,14 @@
+### Get Astronomy Picture of the Day (APOD) - Today
+GET http://localhost:3000/nasa/apod
+
+### Get APOD for Specific Date
+GET http://localhost:3000/nasa/apod?date=2024-01-15
+
+### Get All Posts (Default: limit=10, offset=0)
+GET http://localhost:3000/nasa/posts
+
+### Get All Posts with Pagination
+GET http://localhost:3000/nasa/posts?limit=20&offset=10
+
+### Get Post by Date
+GET http://localhost:3000/nasa/posts/2024-01-15

@@ -1,0 +1,26 @@
+### Like Post
+POST http://localhost:3000/likes
+Content-Type: application/json
+
+{
+    "userId": "67759c60-6b97-4c7c-9195-be7be551c821",
+    "postId": "35e11cfc-a40c-495c-a5ce-6b805ca64c2c"
+}
+
+### Unlike Post
+DELETE http://localhost:3000/likes
+Content-Type: application/json
+
+{
+    "userId": "67759c60-6b97-4c7c-9195-be7be551c821",
+    "postId": "35e11cfc-a40c-495c-a5ce-6b805ca64c2c"
+}
+
+### Get Post Likes
+GET http://localhost:3000/likes/post/35e11cfc-a40c-495c-a5ce-6b805ca64c2c
+
+### Get User Liked Posts
+GET http://localhost:3000/likes/user/67759c60-6b97-4c7c-9195-be7be551c821
+
+### Check if Post is Liked
+GET http://localhost:3000/likes/check/user-id-here/post-id-here
