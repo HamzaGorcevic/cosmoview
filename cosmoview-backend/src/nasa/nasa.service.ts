@@ -97,16 +97,14 @@ export class NasaService {
         if (offset === 0 && posts.length < minimumPosts) {
             console.log(`Only ${posts.length} posts in DB, fetching more from NASA API...`);
             
-            // Fetch the last 30 days of APOD
             const today = new Date();
             const promises: Promise<any>[] = [];
             
-            for (let i = 0; i < 30; i++) {
+            for (let i = 1; i <= 30; i++) {
                 const date = new Date(today);
                 date.setDate(date.getDate() - i);
                 const dateString = date.toISOString().split('T')[0];
                 
-                // Check if we already have this date
                 const exists = posts.some(p => p.date === dateString);
                 if (!exists) {
                     promises.push(

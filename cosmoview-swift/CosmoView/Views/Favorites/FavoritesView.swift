@@ -121,18 +121,28 @@ class FavoritesViewModel: ObservableObject {
             do {
                 let favoritesResponse = try await APIService.shared.getUserFavorites(userId: userId)
                 
+                print("✅ Favorites response status: \(favoritesResponse.status)")
+                print("✅ Favorites count: \(favoritesResponse.count ?? 0)")
+                print("✅ Favorites data: \(String(describing: favoritesResponse.data))")
+                
                 if let favorites = favoritesResponse.data, !favorites.isEmpty {
                     let favoritePostIds = favorites.map { $0.postId }
+                    print("✅ Post IDs: \(favoritePostIds)")
+                    
                     let postsResponse = try await APIService.shared.getAllPosts(limit: 100, offset: 0)
                     
                     if let allPosts = postsResponse.data {
                         favoritePosts = allPosts.filter { favoritePostIds.contains($0.id) }
+                        print("✅ Matched \(favoritePosts.count) posts")
                     }
                 } else {
                     favoritePosts = []
                 }
             } catch {
-                print("Failed to load favorites")
+                print("❌ Favorites error: \(error)")
+                if let decodingError = error as? DecodingError {
+                    print("❌ Decoding error details: \(decodingError)")
+                }
                 favoritePosts = []
             }
             isLoading = false
