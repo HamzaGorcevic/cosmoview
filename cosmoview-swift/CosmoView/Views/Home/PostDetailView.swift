@@ -15,8 +15,10 @@ struct PostDetailView: View {
     // Use HD URL if available, otherwise standard URL
     private var imageURL: URL? {
         if let hdurl = post.hdurl, !hdurl.isEmpty, let url = URL(string: hdurl) {
+            print("🖼️ Using HD URL for post \(post.id): \(hdurl)")
             return url
         }
+        print("🖼️ Using standard URL for post \(post.id): \(post.url)")
         return URL(string: post.url)
     }
     

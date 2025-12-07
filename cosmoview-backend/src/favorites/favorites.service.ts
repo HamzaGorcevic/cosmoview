@@ -50,20 +50,7 @@ export class FavoritesService {
     async getUserFavorites(userId: string) {
         const { data, error } = await this.supabaseService.getClient()
             .from('favorites')
-            .select(`
-                id,
-                post_id,
-                created_at,
-                nasa_posts (
-                    id,
-                    date,
-                    title,
-                    explanation,
-                    url,
-                    hdurl,
-                    media_type
-                )
-            `)
+            .select('id, user_id, post_id, created_at')
             .eq('user_id', userId)
             .order('created_at', { ascending: false });
 

@@ -112,32 +112,48 @@ class FavoritesViewModel: ObservableObject {
     }
     
     func loadFavorites() {
-        guard !userId.isEmpty else { return }
+        guard !userId.isEmpty else { 
+            print("⚠️ No userId available for loading favorites")
+            return 
+        }
         guard !isLoading else { return }
         
         isLoading = true
         
         Task {
             do {
+                print("📡 Fetching favorites for user: \(userId)")
+                
                 // First get favorite IDs
                 let favoritesResponse = try await APIService.shared.getUserFavorites(userId: userId)
                 
-                if let favorites = favoritesResponse.data {
-                    var posts: [NASAPost] = []
+                print("✅ Received \(favoritesResponse.count ?? 0) favorites")
+                
+                if let favorites = favoritesResponse.data, !favorites.isEmpty {
+                    // Get all post IDs
+                    let favoritePostIds = favorites.map { $0.postId }
+                    print("📋 Favorite post IDs: \(favoritePostIds)")
                     
-                    for favorite in favorites {
-                        let postsResponse = try await APIService.shared.getAllPosts(limit: 100, offset: 0)
-                        if let allPosts = postsResponse.data {
-                            if let post = allPosts.first(where: { $0.id == favorite.postId }) {
-                                posts.append(post)
-                            }
+                    // Fetch all posts at once (increase limit to get all posts)
+                    let postsResponse = try await APIService.shared.getAllPosts(limit: 100, offset: 0)
+                    
+                    if let allPosts = postsResponse.data {
+                        print("📦 Fetched \(allPosts.count) total posts")
+                        
+                        // Filter posts that match favorite IDs
+                        let matchedPosts = allPosts.filter { post in
+                            favoritePostIds.contains(post.id)
                         }
+                        
+                        print("⭐ Matched \(matchedPosts.count) favorite posts")
+                        favoritePosts = matchedPosts
                     }
-                    
-                    favoritePosts = posts
+                } else {
+                    print("ℹ️ No favorites found")
+                    favoritePosts = []
                 }
             } catch {
-                print("Failed to load favorites: \(error.localizedDescription)")
+                print("❌ Failed to load favorites: \(error.localizedDescription)")
             }
             isLoading = false
         }
