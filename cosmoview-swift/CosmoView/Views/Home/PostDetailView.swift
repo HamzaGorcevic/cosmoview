@@ -12,13 +12,8 @@ struct PostDetailView: View {
         _viewModel = StateObject(wrappedValue: PostDetailViewModel(postId: post.id))
     }
     
-    // Use HD URL if available, otherwise standard URL
+    // Just use standard URL - simple and reliable
     private var imageURL: URL? {
-        if let hdurl = post.hdurl, !hdurl.isEmpty, let url = URL(string: hdurl) {
-            print("🖼️ Using HD URL for post \(post.id): \(hdurl)")
-            return url
-        }
-        print("🖼️ Using standard URL for post \(post.id): \(post.url)")
         return URL(string: post.url)
     }
     

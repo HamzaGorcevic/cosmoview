@@ -36,9 +36,8 @@ class PostDetailViewModel: ObservableObject {
         do {
             let response = try await APIService.shared.checkIfLiked(userId: userId, postId: postId)
             isLiked = response.isLiked
-            print(" Like status for post \(postId): \(response.isLiked)")
         } catch {
-            print(" Failed to load like status: \(error.localizedDescription)")
+            print("Failed to load like status")
         }
     }
     
@@ -47,10 +46,9 @@ class PostDetailViewModel: ObservableObject {
             let response = try await APIService.shared.getPostLikes(postId: postId)
             if let likes = response.data {
                 likesCount = likes.count
-                print("📊 Likes count for post \(postId): \(likes.count)")
             }
         } catch {
-            print("❌ Failed to load likes count: \(error.localizedDescription)")
+            print("Failed to load likes count")
         }
     }
     

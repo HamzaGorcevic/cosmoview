@@ -56,22 +56,21 @@ struct Comment: Codable, Identifiable {
 // MARK: - Like Model
 struct Like: Codable, Identifiable {
     let id: String
-    let userId: String
-    let postId: String
-    let createdAt: String
+    let userId: String?
+    let createdAt: String?
     
     enum CodingKeys: String, CodingKey {
         case id
         case userId = "user_id"
-        case postId = "post_id"
         case createdAt = "created_at"
     }
 }
 
+
 // MARK: - Favorite Model
 struct Favorite: Codable, Identifiable {
     let id: String
-    let userId: String
+    let userId: String?
     let postId: String
     let createdAt: String
     
