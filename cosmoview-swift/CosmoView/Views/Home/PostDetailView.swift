@@ -12,6 +12,14 @@ struct PostDetailView: View {
         _viewModel = StateObject(wrappedValue: PostDetailViewModel(postId: post.id))
     }
     
+    // Use HD URL if available, otherwise standard URL
+    private var imageURL: URL? {
+        if let hdurl = post.hdurl, !hdurl.isEmpty, let url = URL(string: hdurl) {
+            return url
+        }
+        return URL(string: post.url)
+    }
+    
     var body: some View {
         ZStack {
             // Background
@@ -43,17 +51,34 @@ struct PostDetailView: View {
                     .padding(.top, 10)
                     
                     // Image
-                    AsyncImage(url: URL(string: post.hdurl ?? post.url)) { phase in
+                    AsyncImage(url: imageURL) { phase in
                         switch phase {
                         case .success(let image):
                             image
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .cornerRadius(20)
-                        case .failure(_):
-                            Color.gray.opacity(0.3)
-                                .frame(height: 300)
-                                .cornerRadius(20)
+                        case .failure(let error):
+                            VStack(spacing: 12) {
+                                Color.gray.opacity(0.3)
+                                    .frame(height: 300)
+                                    .cornerRadius(20)
+                                    .overlay(
+                                        VStack(spacing: 12) {
+                                            Image(systemName: "exclamationmark.triangle.fill")
+                                                .font(.system(size: 40))
+                                                .foregroundColor(.yellow)
+                                            Text("Image not available")
+                                                .font(.system(size: 14))
+                                                .foregroundColor(.white.opacity(0.7))
+                                            Text(error.localizedDescription)
+                                                .font(.system(size: 12))
+                                                .foregroundColor(.white.opacity(0.5))
+                                                .multilineTextAlignment(.center)
+                                                .padding(.horizontal)
+                                        }
+                                    )
+                            }
                         case .empty:
                             Color.gray.opacity(0.3)
                                 .frame(height: 300)

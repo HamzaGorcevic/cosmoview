@@ -82,12 +82,29 @@ class AuthenticationManager: ObservableObject {
     
     private func loadAuthState() {
         isAuthenticated = UserDefaults.standard.bool(forKey: "isAuthenticated")
-        userId = UserDefaults.standard.string(forKey: "userId")
+        let storedUserId = UserDefaults.standard.string(forKey: "userId")
+        
+        // Validate that userId is a proper UUID, not an email
+        if let storedUserId = storedUserId, isValidUUID(storedUserId) {
+            userId = storedUserId
+        } else {
+            // Clear invalid userId (e.g., if it's an email from old data)
+            userId = nil
+            if storedUserId != nil {
+                print("⚠️ Invalid userId detected (not a UUID): \(storedUserId ?? "nil"). Clearing cached data.")
+                clearAuthState()
+            }
+        }
         
         // Load currentUser from JSON
         if let data = UserDefaults.standard.data(forKey: "currentUser") {
             currentUser = try? JSONDecoder().decode(User.self, from: data)
         }
+    }
+    
+    // Helper to validate UUID format
+    private func isValidUUID(_ string: String) -> Bool {
+        return UUID(uuidString: string) != nil
     }
     
     private func clearAuthState() {
