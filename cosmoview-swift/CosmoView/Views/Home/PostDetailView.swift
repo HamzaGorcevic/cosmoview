@@ -14,7 +14,8 @@ struct PostDetailView: View {
     
     // Just use standard URL - simple and reliable
     private var imageURL: URL? {
-        return URL(string: post.url)
+        guard let urlString = post.url else { return nil }
+        return URL(string: urlString)
     }
     
     var body: some View {

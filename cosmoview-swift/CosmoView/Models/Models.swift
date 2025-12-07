@@ -21,7 +21,7 @@ struct NASAPost: Codable, Identifiable {
     let date: String
     let title: String
     let explanation: String
-    let url: String
+    let url: String?  // Optional in case of null
     let mediaType: String
     let hdurl: String?
     let copyright: String?

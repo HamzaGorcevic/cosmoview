@@ -116,33 +116,44 @@ struct PostCard: View {
         Button(action: { showDetail = true }) {
             VStack(alignment: .leading, spacing: 0) {
                 // Image
-                AsyncImage(url: URL(string: post.url)) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(height: 240)
-                            .frame(maxWidth: .infinity)
-                            .clipped()
-                    case .failure(_):
-                        Color.gray.opacity(0.3)
-                            .frame(height: 240)
-                            .overlay(
-                                Image(systemName: "photo")
-                                    .font(.system(size: 40))
-                                    .foregroundColor(.white.opacity(0.3))
-                            )
-                    case .empty:
-                        Color.gray.opacity(0.3)
-                            .frame(height: 240)
-                            .overlay(
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            )
-                    @unknown default:
-                        EmptyView()
+                if let urlString = post.url, let url = URL(string: urlString) {
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(height: 240)
+                                .frame(maxWidth: .infinity)
+                                .clipped()
+                        case .failure(_):
+                            Color.gray.opacity(0.3)
+                                .frame(height: 240)
+                                .overlay(
+                                    Image(systemName: "photo")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(.white.opacity(0.3))
+                                )
+                        case .empty:
+                            Color.gray.opacity(0.3)
+                                .frame(height: 240)
+                                .overlay(
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                )
+                        @unknown default:
+                            EmptyView()
+                        }
                     }
+                } else {
+                    // No URL available
+                    Color.gray.opacity(0.3)
+                        .frame(height: 240)
+                        .overlay(
+                            Image(systemName: "photo.slash")
+                                .font(.system(size: 40))
+                                .foregroundColor(.white.opacity(0.3))
+                        )
                 }
                 
                 // Content

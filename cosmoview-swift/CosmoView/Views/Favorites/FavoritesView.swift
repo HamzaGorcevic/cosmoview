@@ -132,7 +132,10 @@ class FavoritesViewModel: ObservableObject {
                     let postsResponse = try await APIService.shared.getAllPosts(limit: 100, offset: 0)
                     
                     if let allPosts = postsResponse.data {
-                        favoritePosts = allPosts.filter { favoritePostIds.contains($0.id) }
+                        // Filter by favorites AND exclude posts with null URLs
+                        favoritePosts = allPosts.filter { 
+                            favoritePostIds.contains($0.id) && $0.url != nil
+                        }
                         print("✅ Matched \(favoritePosts.count) posts")
                     }
                 } else {
