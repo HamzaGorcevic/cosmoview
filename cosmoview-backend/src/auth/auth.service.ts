@@ -1,86 +1,124 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseService } from 'src/supabase/supabase.service';
 import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class AuthService {
-    constructor(private readonly supabaseService:SupabaseService){}
-    async createUser(username:string,email:string,password:string){
-        const { data: existingUser, error: fetchError } = await this.supabaseService.getClient()
-        .from('users')
-        .select('id')
-        .eq('email', email)
-        .single();
-      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = no rows found
-        console.error('Error checking user existence:', fetchError);
-        return ('Failed to check user');
-      }
-      if (existingUser) {
-        return ('User with this email already exists');
-      }
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+  constructor(private readonly supabaseService: SupabaseService) {}
 
-        const {data,error} = await this.supabaseService.getClient().from("users").insert([{username,email,password_hash:hashedPassword}]);
-        if(error){
-            console.error("Error creating user:",error);
-            return "Failed to create user";
-        }
-        return "User created successfully";
+  async createUser(username: string, email: string, password: string) {
+    const { data: existingUser, error: fetchError } = await this.supabaseService.getClient()
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.error('Error checking user existence:', fetchError);
+      return { status: false, message: 'Failed to check user', data: null };
     }
-    async loginUser(email:string,password:string){
-        const { data: user, error } = await this.supabaseService.getClient()
-        .from('users')
-        .select('id, username, email, created_at, updated_at')
-        .eq('email', email)
-        .maybeSingle();
-      if (error) {
-        console.error('Error fetching user:', error);
-        throw new Error('User not found');
-      }
-      if (!user) {
-        throw new Error('User not found');
-      }
-      // Get the password hash separately
-      const { data: authData } = await this.supabaseService.getClient()
-        .from('users')
-        .select('password_hash')
-        .eq('email', email)
-        .single();
-      
-      const isPasswordValid = await this.verifyPassword(password, authData.password_hash);
-      if (!isPasswordValid) {
-        throw new Error('Invalid password');
-      }
-      // Return user object without password
-      return user;
+
+    if (existingUser) {
+      return { status: false, message: 'User with this email already exists', data: null };
     }
-    async verifyPassword(password:string,hashedPassword:string):Promise<boolean>{
-        return bcrypt.compare(password,hashedPassword);
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const { data, error } = await this.supabaseService.getClient()
+      .from('users')
+      .insert([{ username, email, password_hash: hashedPassword }])
+      .select('id, username, email, created_at, updated_at')
+      .single();
+
+    if (error) {
+      console.error('Error creating user:', error);
+      return { status: false, message: 'Failed to create user', data: null };
     }
-    async changePassword(userId:string,oldPassword:string,newPassword:string){
-        const { data: user, error } = await this.supabaseService.getClient()
-        .from('users')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      if (error) {
-        console.error('Error fetching user:', error);
-        return 'User not found';
+
+    return { 
+      status: true, 
+      message: 'User created successfully', 
+      data: {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at
       }
-      const isPasswordValid = await this.verifyPassword(oldPassword, user.password_hash);
-      if (!isPasswordValid) {
-        return 'Invalid old password';
-      }
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-      const {error: updateError} = await this.supabaseService.getClient()
-        .from('users')
-        .update({password_hash:hashedPassword,updated_at:new Date().toISOString()})
-        .eq('id', userId);
-      if(updateError){
-        console.error("Error updating password:",updateError);
-        return "Failed to update password";
-      }
-      return "Password changed successfully";
+    };
+  }
+
+  async loginUser(email: string, password: string) {
+    const { data: user, error } = await this.supabaseService.getClient()
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    if (error || !user) {
+      return { status: false, message: 'User not found', data: null };
     }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+
+    if (!isPasswordValid) {
+      return { status: false, message: 'Invalid password', data: null };
+    }
+
+    return { 
+      status: true, 
+      message: 'Login successful', 
+      data: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        createdAt: user.created_at,
+        updatedAt: user.updated_at
+      }
+    };
+  }
+
+  async changePassword(userId: string, oldPassword: string, newPassword: string) {
+    const { data: user, error } = await this.supabaseService.getClient()
+      .from('users')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (error || !user) {
+      return { status: false, message: 'User not found', data: null };
+    }
+
+    const isPasswordValid = await bcrypt.compare(oldPassword, user.password_hash);
+
+    if (!isPasswordValid) {
+      return { status: false, message: 'Invalid old password', data: null };
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    const { data: updatedUser, error: updateError } = await this.supabaseService.getClient()
+      .from('users')
+      .update({ password_hash: hashedPassword, updated_at: new Date().toISOString() })
+      .eq('id', userId)
+      .select('id, username, email, created_at, updated_at')
+      .single();
+
+    if (updateError) {
+      console.error('Error updating password:', updateError);
+      return { status: false, message: 'Failed to update password', data: null };
+    }
+
+    return { 
+      status: true, 
+      message: 'Password changed successfully', 
+      data: {
+        id: updatedUser.id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        createdAt: updatedUser.created_at,
+        updatedAt: updatedUser.updated_at
+      }
+    };
+  }
 }

@@ -169,6 +169,7 @@ struct ChangePasswordView: View {
                     showSuccess = true
                 }
             } catch {
+                print(error)
                 await MainActor.run {
                     errorMessage = error.localizedDescription
                     showError = true

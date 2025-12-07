@@ -5,7 +5,6 @@ class APIService {
     
     private init() {}
     
-    // MARK: - Generic Request Method
     private func request<T: Codable>(
         endpoint: String,
         method: String = "GET",
@@ -25,6 +24,12 @@ class APIService {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
+        print("=== RAW RESPONSE ===")
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("JSON: \(jsonString)")
+        }
+        print("===================")
+        
         guard let httpResponse = response as? HTTPURLResponse,
               (200...299).contains(httpResponse.statusCode) else {
             throw URLError(.badServerResponse)
@@ -34,7 +39,6 @@ class APIService {
         return try decoder.decode(T.self, from: data)
     }
     
-    // MARK: - Auth Endpoints
     func register(username: String, email: String, password: String) async throws -> AuthResponse {
         let body: [String: Any] = [
             "username": username,
@@ -61,15 +65,11 @@ class APIService {
         return try await request(endpoint: APIConfig.Endpoints.changePassword, method: "POST", body: body)
     }
     
-    // MARK: - NASA Endpoints
     func getAPOD(date: String? = nil) async throws -> APIResponse<NASAPost> {
-        var endpoint = APIConfig.Endpoints.apod
-        if let date = date {
-            endpoint += "?date=\(date)"
-        }
+        let endpoint = APIConfig.Endpoints.apod
         return try await request(endpoint: endpoint)
     }
-    
+            
     func getAllPosts(limit: Int = 10, offset: Int = 0) async throws -> APIResponse<[NASAPost]> {
         let endpoint = "\(APIConfig.Endpoints.posts)?limit=\(limit)&offset=\(offset)"
         return try await request(endpoint: endpoint)
@@ -79,7 +79,6 @@ class APIService {
         return try await request(endpoint: APIConfig.Endpoints.postByDate(date))
     }
     
-    // MARK: - Likes Endpoints
     func likePost(userId: String, postId: String) async throws -> APIResponse<String> {
         let body: [String: Any] = ["userId": userId, "postId": postId]
         return try await request(endpoint: APIConfig.Endpoints.likes, method: "POST", body: body)
@@ -102,7 +101,6 @@ class APIService {
         return try await request(endpoint: APIConfig.Endpoints.checkLike(userId: userId, postId: postId))
     }
     
-    // MARK: - Favorites Endpoints
     func addToFavorites(userId: String, postId: String) async throws -> APIResponse<String> {
         let body: [String: Any] = ["userId": userId, "postId": postId]
         return try await request(endpoint: APIConfig.Endpoints.favorites, method: "POST", body: body)
@@ -121,7 +119,6 @@ class APIService {
         return try await request(endpoint: APIConfig.Endpoints.checkFavorite(userId: userId, postId: postId))
     }
     
-    // MARK: - Comments Endpoints
     func createComment(userId: String, postId: String, content: String, parentId: String? = nil) async throws -> APIResponse<Comment> {
         var body: [String: Any] = [
             "userId": userId,
