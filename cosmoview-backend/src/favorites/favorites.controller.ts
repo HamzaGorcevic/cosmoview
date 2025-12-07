@@ -20,12 +20,12 @@ export class FavoritesController {
     @Get('user/:userId')
     async getUserFavorites(@Param('userId') userId: string) {
         const favorites = await this.favoritesService.getUserFavorites(userId);
-        // Transform nested structure to flat structure expected by Swift
+        // Return with snake_case field names for Swift
         const transformedFavorites = favorites.map(fav => ({
             id: fav.id,
-            userId: fav.user_id || userId,
-            postId: fav.post_id,
-            createdAt: fav.created_at
+            user_id: fav.user_id || userId,
+            post_id: fav.post_id,
+            created_at: fav.created_at
         }));
         return { status: true, data: transformedFavorites, count: transformedFavorites.length };
     }

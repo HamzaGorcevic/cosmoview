@@ -59,7 +59,20 @@ class APODViewModel: ObservableObject {
                     apod = post
                 }
             } catch {
-                errorMessage = "Failed to load today's picture: \(error.localizedDescription)"
+                // If today's APOD fails (likely 404), try yesterday's
+                do {
+                    let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy-MM-dd"
+                    let dateString = formatter.string(from: yesterday)
+                    
+                    let response = try await APIService.shared.getAPOD(date: dateString)
+                    if response.status, let post = response.data {
+                        apod = post
+                    }
+                } catch {
+                    errorMessage = "Failed to load picture: \(error.localizedDescription)"
+                }
             }
             isLoading = false
         }
