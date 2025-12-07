@@ -30,18 +30,29 @@ export class AuthService {
     async loginUser(email:string,password:string){
         const { data: user, error } = await this.supabaseService.getClient()
         .from('users')
-        .select('*')
+        .select('id, username, email, created_at, updated_at')
         .eq('email', email)
         .maybeSingle();
       if (error) {
         console.error('Error fetching user:', error);
-        return 'User not found';
+        throw new Error('User not found');
       }
-      const isPasswordValid = await this.verifyPassword(password, user.password_hash);
+      if (!user) {
+        throw new Error('User not found');
+      }
+      // Get the password hash separately
+      const { data: authData } = await this.supabaseService.getClient()
+        .from('users')
+        .select('password_hash')
+        .eq('email', email)
+        .single();
+      
+      const isPasswordValid = await this.verifyPassword(password, authData.password_hash);
       if (!isPasswordValid) {
-        return 'Invalid password';
+        throw new Error('Invalid password');
       }
-      return "Login successful";
+      // Return user object without password
+      return user;
     }
     async verifyPassword(password:string,hashedPassword:string):Promise<boolean>{
         return bcrypt.compare(password,hashedPassword);

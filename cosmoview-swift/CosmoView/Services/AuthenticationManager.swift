@@ -29,13 +29,12 @@ class AuthenticationManager: ObservableObject {
     func login(email: String, password: String) async throws {
         let response = try await APIService.shared.login(email: email, password: password)
         
-        if response.status {
-            // Save auth state
+        if response.status, let user = response.data {
+            // Save auth state with actual user data
             await MainActor.run {
                 self.isAuthenticated = true
-                // For now, we'll generate a temporary user ID based on email
-                // In production, the backend should return user details
-                self.userId = email
+                self.currentUser = user
+                self.userId = user.id  // Use the actual UUID from backend
                 self.saveAuthState()
             }
         } else {
@@ -72,16 +71,29 @@ class AuthenticationManager: ObservableObject {
     private func saveAuthState() {
         UserDefaults.standard.set(isAuthenticated, forKey: "isAuthenticated")
         UserDefaults.standard.set(userId, forKey: "userId")
+        
+        // Save currentUser as JSON
+        if let user = currentUser {
+            if let encoded = try? JSONEncoder().encode(user) {
+                UserDefaults.standard.set(encoded, forKey: "currentUser")
+            }
+        }
     }
     
     private func loadAuthState() {
         isAuthenticated = UserDefaults.standard.bool(forKey: "isAuthenticated")
         userId = UserDefaults.standard.string(forKey: "userId")
+        
+        // Load currentUser from JSON
+        if let data = UserDefaults.standard.data(forKey: "currentUser") {
+            currentUser = try? JSONDecoder().decode(User.self, from: data)
+        }
     }
     
     private func clearAuthState() {
         UserDefaults.standard.removeObject(forKey: "isAuthenticated")
         UserDefaults.standard.removeObject(forKey: "userId")
+        UserDefaults.standard.removeObject(forKey: "currentUser")
     }
 }
 

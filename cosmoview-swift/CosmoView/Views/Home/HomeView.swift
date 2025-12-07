@@ -114,7 +114,7 @@ struct PostCard: View {
     
     var body: some View {
         Button(action: { showDetail = true }) {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 0) {
                 // Image
                 AsyncImage(url: URL(string: post.url)) { phase in
                     switch phase {
@@ -122,11 +122,12 @@ struct PostCard: View {
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(height: 220)
+                            .frame(height: 240)
+                            .frame(maxWidth: .infinity)
                             .clipped()
                     case .failure(_):
                         Color.gray.opacity(0.3)
-                            .frame(height: 220)
+                            .frame(height: 240)
                             .overlay(
                                 Image(systemName: "photo")
                                     .font(.system(size: 40))
@@ -134,7 +135,7 @@ struct PostCard: View {
                             )
                     case .empty:
                         Color.gray.opacity(0.3)
-                            .frame(height: 220)
+                            .frame(height: 240)
                             .overlay(
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -143,16 +144,16 @@ struct PostCard: View {
                         EmptyView()
                     }
                 }
-                .cornerRadius(16)
                 
                 // Content
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 10) {
                     Text(post.title)
-                        .font(.system(size: 20, weight: .bold))
+                        .font(.system(size: 22, weight: .bold))
                         .foregroundColor(.white)
                         .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     
-                    HStack {
+                    HStack(spacing: 6) {
                         Image(systemName: "calendar")
                             .font(.system(size: 12))
                         Text(post.date)
@@ -168,23 +169,33 @@ struct PostCard: View {
                     .foregroundColor(.white.opacity(0.6))
                     
                     Text(post.explanation)
-                        .font(.system(size: 14))
+                        .font(.system(size: 15))
                         .foregroundColor(.white.opacity(0.8))
                         .lineLimit(3)
+                        .lineSpacing(4)
                 }
-                .padding(.horizontal, 12)
-                .padding(.bottom, 12)
+                .padding(16)
             }
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.white.opacity(0.05))
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.08),
+                                Color.white.opacity(0.03)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                            .stroke(Color.white.opacity(0.15), lineWidth: 1)
                     )
             )
-            .shadow(color: .black.opacity(0.3), radius: 10, y: 5)
+            .shadow(color: .black.opacity(0.4), radius: 15, x: 0, y: 8)
         }
+        .buttonStyle(PlainButtonStyle())
         .sheet(isPresented: $showDetail) {
             PostDetailView(post: post)
         }

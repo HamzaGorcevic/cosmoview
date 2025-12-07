@@ -78,6 +78,7 @@ export class NasaService {
     }
 
     async getAllPosts(limit: number = 10, offset: number = 0) {
+        // First, get posts from database
         const { data, error } = await this.supabaseService.getClient()
             .from('nasa_posts')
             .select('*')
@@ -89,7 +90,48 @@ export class NasaService {
             return [];
         }
 
-        return data || [];
+        let posts = data || [];
+        
+        // If we don't have enough posts, fetch more from NASA API
+        const minimumPosts = 20;
+        if (offset === 0 && posts.length < minimumPosts) {
+            console.log(`Only ${posts.length} posts in DB, fetching more from NASA API...`);
+            
+            // Fetch the last 30 days of APOD
+            const today = new Date();
+            const promises: Promise<any>[] = [];
+            
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateString = date.toISOString().split('T')[0];
+                
+                // Check if we already have this date
+                const exists = posts.some(p => p.date === dateString);
+                if (!exists) {
+                    promises.push(
+                        this.getAstronomyPictureOfTheDay(dateString).catch(err => {
+                            console.error(`Failed to fetch APOD for ${dateString}:`, err.message);
+                            return null;
+                        })
+                    );
+                }
+            }
+            
+            // Wait for all fetches
+            await Promise.all(promises);
+            
+            // Re-fetch from database
+            const { data: updatedData } = await this.supabaseService.getClient()
+                .from('nasa_posts')
+                .select('*')
+                .order('date', { ascending: false })
+                .range(offset, offset + limit - 1);
+            
+            posts = updatedData || posts;
+        }
+
+        return posts;
     }
 
 }

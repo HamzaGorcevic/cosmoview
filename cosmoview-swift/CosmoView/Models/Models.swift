@@ -93,7 +93,7 @@ struct APIResponse<T: Codable>: Codable {
 
 struct AuthResponse: Codable {
     let status: Bool
-    let data: String
+    let data: User?
     let message: String
 }
 
