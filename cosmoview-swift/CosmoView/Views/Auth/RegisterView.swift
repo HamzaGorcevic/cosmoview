@@ -3,6 +3,7 @@ import SwiftUI
 struct RegisterView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var themeManager: ThemeManager
     
     @State private var username = ""
     @State private var email = ""
@@ -17,10 +18,14 @@ struct RegisterView: View {
         ZStack {
             // Background
             LinearGradient(
-                colors: [
+                colors: themeManager.isDarkMode ? [
                     Color(red: 0.05, green: 0.05, blue: 0.2),
                     Color(red: 0.1, green: 0.0, blue: 0.3),
                     Color.black
+                ] : [
+                    Color(red: 0.95, green: 0.95, blue: 1.0),
+                    Color(red: 0.9, green: 0.9, blue: 1.0),
+                    Color.white
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -28,6 +33,7 @@ struct RegisterView: View {
             .ignoresSafeArea()
             
             StarsBackgroundView()
+                .environmentObject(themeManager)
             
             VStack(spacing: 0) {
                 // Header
@@ -35,9 +41,9 @@ struct RegisterView: View {
                     Button(action: { dismiss() }) {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(themeManager.isDarkMode ? .white : .black)
                             .frame(width: 40, height: 40)
-                            .background(Color.white.opacity(0.1))
+                            .background(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.1))
                             .clipShape(Circle())
                     }
                     Spacer()
@@ -51,11 +57,11 @@ struct RegisterView: View {
                 VStack(spacing: 12) {
                     Text("Create Account")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .foregroundColor(themeManager.isDarkMode ? .white : .black)
                     
                     Text("Join the cosmic journey 🚀")
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                 }
                 .padding(.bottom, 50)
                 
@@ -186,4 +192,5 @@ struct RegisterView: View {
 #Preview {
     RegisterView()
         .environmentObject(AuthenticationManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

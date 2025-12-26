@@ -3,6 +3,7 @@ import SwiftUI
 struct PostDetailView: View {
     let post: NASAPost
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel: PostDetailViewModel
     @State private var commentText = ""
     @State private var showComments = false
@@ -22,9 +23,12 @@ struct PostDetailView: View {
         ZStack {
             // Background
             LinearGradient(
-                colors: [
+                colors: themeManager.isDarkMode ? [
                     Color(red: 0.05, green: 0.05, blue: 0.2),
                     Color(red: 0.0, green: 0.0, blue: 0.1)
+                ] : [
+                    Color(red: 0.95, green: 0.95, blue: 1.0),
+                    Color(red: 0.9, green: 0.9, blue: 1.0)
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -38,9 +42,9 @@ struct PostDetailView: View {
                         Button(action: { dismiss() }) {
                             Image(systemName: "xmark")
                                 .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(.white)
+                                .foregroundColor(themeManager.isDarkMode ? .white : .black)
                                 .frame(width: 40, height: 40)
-                                .background(Color.white.opacity(0.1))
+                                .background(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.1))
                                 .clipShape(Circle())
                         }
                         Spacer()
@@ -68,10 +72,10 @@ struct PostDetailView: View {
                                                 .foregroundColor(.yellow)
                                             Text("Image not available")
                                                 .font(.system(size: 14))
-                                                .foregroundColor(.white.opacity(0.7))
+                                                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                                             Text(error.localizedDescription)
                                                 .font(.system(size: 12))
-                                                .foregroundColor(.white.opacity(0.5))
+                                                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.5) : .black.opacity(0.5))
                                                 .multilineTextAlignment(.center)
                                                 .padding(.horizontal)
                                         }
@@ -83,7 +87,7 @@ struct PostDetailView: View {
                                 .cornerRadius(20)
                                 .overlay(
                                     ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .progressViewStyle(CircularProgressViewStyle(tint: themeManager.isDarkMode ? .white : .black))
                                 )
                         @unknown default:
                             EmptyView()
@@ -95,7 +99,7 @@ struct PostDetailView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         Text(post.title)
                             .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(themeManager.isDarkMode ? .white : .black)
                         
                         HStack {
                             Image(systemName: "calendar")
@@ -110,7 +114,7 @@ struct PostDetailView: View {
                                     .lineLimit(1)
                             }
                         }
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.6) : .black.opacity(0.6))
                     }
                     .padding(.horizontal, 24)
                     
@@ -154,11 +158,11 @@ struct PostDetailView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("About")
                             .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(themeManager.isDarkMode ? .white : .black)
                         
                         Text(post.explanation)
                             .font(.system(size: 16))
-                            .foregroundColor(.white.opacity(0.8))
+                            .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.8) : .black.opacity(0.8))
                             .lineSpacing(6)
                     }
                     .padding(.horizontal, 24)
@@ -168,16 +172,16 @@ struct PostDetailView: View {
                         VStack(alignment: .leading, spacing: 16) {
                             Text("Comments")
                                 .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(.white)
+                                .foregroundColor(themeManager.isDarkMode ? .white : .black)
                             
                             // Add Comment
                             HStack(spacing: 12) {
                                 TextField("Add a comment...", text: $commentText)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(themeManager.isDarkMode ? .white : .black)
                                     .padding()
                                     .background(
                                         RoundedRectangle(cornerRadius: 12)
-                                            .fill(Color.white.opacity(0.1))
+                                            .fill(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.05))
                                     )
                                 
                                 Button(action: {
@@ -221,6 +225,7 @@ struct PostDetailView: View {
 
 // MARK: - Action Button
 struct ActionButton: View {
+    @EnvironmentObject var themeManager: ThemeManager
     let icon: String
     let count: Int?
     let isActive: Bool
@@ -232,22 +237,22 @@ struct ActionButton: View {
             HStack(spacing: 6) {
                 Image(systemName: icon)
                     .font(.system(size: 20))
-                    .foregroundColor(isActive ? color : .white.opacity(0.6))
+                    .foregroundColor(isActive ? color : (themeManager.isDarkMode ? .white.opacity(0.6) : .black.opacity(0.6)))
                 
                 if let count = count {
                     Text("\(count)")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.8) : .black.opacity(0.8))
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isActive ? color.opacity(0.2) : Color.white.opacity(0.05))
+                    .fill(isActive ? color.opacity(0.2) : (themeManager.isDarkMode ? Color.white.opacity(0.05) : Color.black.opacity(0.05)))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(isActive ? color.opacity(0.5) : Color.white.opacity(0.1), lineWidth: 1)
+                            .stroke(isActive ? color.opacity(0.5) : (themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.1)), lineWidth: 1)
                     )
             )
         }
@@ -257,6 +262,7 @@ struct ActionButton: View {
 
 // MARK: - Comment Row
 struct CommentRow: View {
+    @EnvironmentObject var themeManager: ThemeManager
     let comment: Comment
     
     var body: some View {
@@ -269,11 +275,11 @@ struct CommentRow: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("User \(comment.userId.prefix(8))")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(themeManager.isDarkMode ? .white : .black)
                     
                     Text(formatDate(comment.createdAt))
                         .font(.system(size: 12))
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.5) : .black.opacity(0.5))
                 }
                 
                 Spacer()
@@ -281,13 +287,13 @@ struct CommentRow: View {
             
             Text(comment.content)
                 .font(.system(size: 15))
-                .foregroundColor(.white.opacity(0.9))
+                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.9) : .black.opacity(0.9))
                 .padding(.leading, 36)
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white.opacity(0.05))
+                .fill(themeManager.isDarkMode ? Color.white.opacity(0.05) : Color.black.opacity(0.05))
         )
     }
     
@@ -309,4 +315,5 @@ struct CommentRow: View {
         hdurl: nil,
         copyright: nil
     ))
+    .environmentObject(ThemeManager.shared)
 }

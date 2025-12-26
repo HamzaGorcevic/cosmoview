@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var email = ""
     @State private var password = ""
     @State private var isLoading = false
@@ -13,10 +14,14 @@ struct LoginView: View {
         ZStack {
             // Background Gradient
             LinearGradient(
-                colors: [
+                colors: themeManager.isDarkMode ? [
                     Color(red: 0.05, green: 0.05, blue: 0.2),
                     Color(red: 0.1, green: 0.0, blue: 0.3),
                     Color.black
+                ] : [
+                    Color(red: 0.95, green: 0.95, blue: 1.0),
+                    Color(red: 0.9, green: 0.9, blue: 1.0),
+                    Color.white
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -25,6 +30,7 @@ struct LoginView: View {
             
             // Animated Stars Background
             StarsBackgroundView()
+                .environmentObject(themeManager)
             
             VStack(spacing: 0) {
                 Spacer()
@@ -44,11 +50,11 @@ struct LoginView: View {
                     
                     Text("CosmoView")
                         .font(.system(size: 42, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .foregroundColor(themeManager.isDarkMode ? .white : .black)
                     
                     Text("Explore the Universe 🌌")
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                 }
                 .padding(.bottom, 60)
                 
@@ -60,6 +66,7 @@ struct LoginView: View {
                         placeholder: "Email",
                         text: $email
                     )
+                    .environmentObject(themeManager)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.emailAddress)
                     
@@ -69,6 +76,7 @@ struct LoginView: View {
                         placeholder: "Password",
                         text: $password
                     )
+                    .environmentObject(themeManager)
                     
                     // Login Button
                     Button(action: handleLogin) {
@@ -103,7 +111,7 @@ struct LoginView: View {
                     Button(action: { showRegister = true }) {
                         HStack(spacing: 4) {
                             Text("Don't have an account?")
-                                .foregroundColor(.white.opacity(0.7))
+                                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                             Text("Sign up")
                                 .foregroundColor(.blue)
                                 .fontWeight(.semibold)
@@ -126,6 +134,7 @@ struct LoginView: View {
         .sheet(isPresented: $showRegister) {
             RegisterView()
                 .environmentObject(authManager)
+                .environmentObject(themeManager)
         }
     }
     
@@ -149,6 +158,7 @@ struct LoginView: View {
 
 // MARK: - Custom Text Field
 struct CustomTextField: View {
+    @EnvironmentObject var themeManager: ThemeManager
     let icon: String
     let placeholder: String
     @Binding var text: String
@@ -156,23 +166,23 @@ struct CustomTextField: View {
     var body: some View {
         HStack(spacing: 15) {
             Image(systemName: icon)
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                 .frame(width: 20)
             
             TextField(placeholder, text: $text)
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.isDarkMode ? .white : .black)
                 .placeholder(when: text.isEmpty) {
                     Text(placeholder)
-                        .foregroundColor(.white.opacity(0.5))
+                        .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.5) : .black.opacity(0.5))
                 }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white.opacity(0.1))
+                .fill(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.05))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                        .stroke(themeManager.isDarkMode ? Color.white.opacity(0.2) : Color.black.opacity(0.1), lineWidth: 1)
                 )
         )
     }
@@ -180,6 +190,7 @@ struct CustomTextField: View {
 
 // MARK: - Custom Secure Field
 struct CustomSecureField: View {
+    @EnvironmentObject var themeManager: ThemeManager
     let icon: String
     let placeholder: String
     @Binding var text: String
@@ -188,29 +199,29 @@ struct CustomSecureField: View {
     var body: some View {
         HStack(spacing: 15) {
             Image(systemName: icon)
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                 .frame(width: 20)
             
             if isSecure {
                 SecureField(placeholder, text: $text)
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.isDarkMode ? .white : .black)
             } else {
                 TextField(placeholder, text: $text)
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.isDarkMode ? .white : .black)
             }
             
             Button(action: { isSecure.toggle() }) {
                 Image(systemName: isSecure ? "eye.slash.fill" : "eye.fill")
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
             }
         }
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white.opacity(0.1))
+                .fill(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.05))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                        .stroke(themeManager.isDarkMode ? Color.white.opacity(0.2) : Color.black.opacity(0.1), lineWidth: 1)
                 )
         )
     }
@@ -218,13 +229,14 @@ struct CustomSecureField: View {
 
 // MARK: - Stars Background
 struct StarsBackgroundView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var animate = false
     
     var body: some View {
         ZStack {
             ForEach(0..<50, id: \.self) { i in
                 Circle()
-                    .fill(Color.white.opacity(Double.random(in: 0.2...0.8)))
+                    .fill(themeManager.isDarkMode ? Color.white.opacity(Double.random(in: 0.2...0.8)) : Color.black.opacity(Double.random(in: 0.1...0.4)))
                     .frame(width: CGFloat.random(in: 1...3))
                     .position(
                         x: CGFloat.random(in: 0...UIScreen.main.bounds.width),
@@ -262,4 +274,5 @@ extension View {
 #Preview {
     LoginView()
         .environmentObject(AuthenticationManager.shared)
+        .environmentObject(ThemeManager.shared)
 }

@@ -105,3 +105,25 @@ struct FavoriteCheckResponse: Codable {
     let status: Bool
     let isFavorite: Bool
 }
+
+// MARK: - User Post Model
+struct UserPost: Codable, Identifiable {
+    let id: String
+    let title: String
+    let description: String
+    let imageUrl: String
+    let userId: String
+    let createdAt: String
+    let users: UserSummary?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, title, description, users
+        case imageUrl = "image_url"
+        case userId = "user_id"
+        case createdAt = "created_at"
+    }
+}
+
+struct UserSummary: Codable {
+    let username: String
+}

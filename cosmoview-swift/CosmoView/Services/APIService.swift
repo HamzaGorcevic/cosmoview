@@ -155,4 +155,58 @@ class APIService {
     func getComment(commentId: String) async throws -> APIResponse<Comment> {
         return try await request(endpoint: APIConfig.Endpoints.comment(commentId))
     }
+    
+    // MARK: - User Posts Endpoints
+    func createUserPost(userId: String, title: String, description: String, imageData: Data) async throws -> UserPost {
+        guard let url = URL(string: APIConfig.baseURL + APIConfig.Endpoints.userPosts) else {
+            throw URLError(.badURL)
+        }
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        
+        // Add title
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"title\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\(title)\r\n".data(using: .utf8)!)
+        
+        // Add description
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"description\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\(description)\r\n".data(using: .utf8)!)
+        
+        // Add user_id
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"user_id\"\r\n\r\n".data(using: .utf8)!)
+        body.append("\(userId)\r\n".data(using: .utf8)!)
+        
+        // Add file
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"post.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.httpBody = body
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
+        }
+        
+        return try JSONDecoder().decode(UserPost.self, from: data)
+    }
+    
+    func getUserPosts(userId: String) async throws -> [UserPost] {
+        let response: [UserPost] = try await request(endpoint: APIConfig.Endpoints.userPostsByUser(userId))
+        return response
+    }
 }

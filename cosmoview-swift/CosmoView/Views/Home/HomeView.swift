@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel = HomeViewModel()
     @State private var showAPOD = false
     
@@ -8,9 +9,12 @@ struct HomeView: View {
         ZStack {
             // Background
             LinearGradient(
-                colors: [
+                colors: themeManager.isDarkMode ? [
                     Color(red: 0.05, green: 0.05, blue: 0.2),
                     Color(red: 0.0, green: 0.0, blue: 0.1)
+                ] : [
+                    Color(red: 0.95, green: 0.95, blue: 1.0),
+                    Color(red: 0.9, green: 0.9, blue: 1.0)
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -23,10 +27,10 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("CosmoView")
                             .font(.system(size: 32, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(themeManager.isDarkMode ? .white : .black)
                         Text("Explore the cosmos")
                             .font(.system(size: 14))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.6) : .black.opacity(0.6))
                     }
                     
                     Spacer()
@@ -60,7 +64,7 @@ struct HomeView: View {
                 if viewModel.isLoading && viewModel.posts.isEmpty {
                     Spacer()
                     ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .progressViewStyle(CircularProgressViewStyle(tint: themeManager.isDarkMode ? .white : .black))
                         .scaleEffect(1.5)
                     Spacer()
                 } else if let error = viewModel.errorMessage {
@@ -83,7 +87,7 @@ struct HomeView: View {
                             
                             if viewModel.isLoadingMore {
                                 ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .progressViewStyle(CircularProgressViewStyle(tint: themeManager.isDarkMode ? .white : .black))
                                     .padding()
                             }
                         }
@@ -109,6 +113,7 @@ struct HomeView: View {
 
 // MARK: - Post Card
 struct PostCard: View {
+    @EnvironmentObject var themeManager: ThemeManager
     let post: NASAPost
     @State private var showDetail = false
     
@@ -139,7 +144,7 @@ struct PostCard: View {
                                 .frame(height: 240)
                                 .overlay(
                                     ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                        .progressViewStyle(CircularProgressViewStyle(tint: themeManager.isDarkMode ? .white : .black))
                                 )
                         @unknown default:
                             EmptyView()
@@ -160,7 +165,7 @@ struct PostCard: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text(post.title)
                         .font(.system(size: 22, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(themeManager.isDarkMode ? .white : .black)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
                     
@@ -177,11 +182,11 @@ struct PostCard: View {
                                 .lineLimit(1)
                         }
                     }
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.6) : .black.opacity(0.6))
                     
                     Text(post.explanation)
                         .font(.system(size: 15))
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.8) : .black.opacity(0.8))
                         .lineLimit(3)
                         .lineSpacing(4)
                 }
@@ -191,9 +196,12 @@ struct PostCard: View {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(
                         LinearGradient(
-                            colors: [
+                            colors: themeManager.isDarkMode ? [
                                 Color.white.opacity(0.08),
                                 Color.white.opacity(0.03)
+                            ] : [
+                                Color.white,
+                                Color.white.opacity(0.9)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -201,7 +209,7 @@ struct PostCard: View {
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                            .stroke(themeManager.isDarkMode ? Color.white.opacity(0.15) : Color.black.opacity(0.1), lineWidth: 1)
                     )
             )
             .shadow(color: .black.opacity(0.4), radius: 15, x: 0, y: 8)
@@ -215,6 +223,7 @@ struct PostCard: View {
 
 // MARK: - Error View
 struct ErrorView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     let message: String
     let retry: () -> Void
     
@@ -226,11 +235,11 @@ struct ErrorView: View {
             
             Text("Oops!")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.isDarkMode ? .white : .black)
             
             Text(message)
                 .font(.system(size: 16))
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 40)
             
@@ -254,4 +263,5 @@ struct ErrorView: View {
 
 #Preview {
     HomeView()
+        .environmentObject(ThemeManager.shared)
 }

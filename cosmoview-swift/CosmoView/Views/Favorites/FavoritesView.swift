@@ -1,14 +1,18 @@
 import SwiftUI
 
 struct FavoritesView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel = FavoritesViewModel()
     
     var body: some View {
         ZStack {
             LinearGradient(
-                colors: [
+                colors: themeManager.isDarkMode ? [
                     Color(red: 0.05, green: 0.05, blue: 0.2),
                     Color(red: 0.0, green: 0.0, blue: 0.1)
+                ] : [
+                    Color(red: 0.95, green: 0.95, blue: 1.0),
+                    Color(red: 0.9, green: 0.9, blue: 1.0)
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -20,10 +24,10 @@ struct FavoritesView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Favorites")
                             .font(.system(size: 32, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(themeManager.isDarkMode ? .white : .black)
                         Text("Your starred posts")
                             .font(.system(size: 14))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.6) : .black.opacity(0.6))
                     }
                     
                     Spacer()
@@ -46,7 +50,7 @@ struct FavoritesView: View {
                 if viewModel.isLoading {
                     Spacer()
                     ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .progressViewStyle(CircularProgressViewStyle(tint: themeManager.isDarkMode ? .white : .black))
                         .scaleEffect(1.5)
                     Spacer()
                 } else if viewModel.favoritePosts.isEmpty {
@@ -77,6 +81,7 @@ struct FavoritesView: View {
 
 // MARK: - Empty Favorites View
 struct EmptyFavoritesView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "star.slash")
@@ -91,11 +96,11 @@ struct EmptyFavoritesView: View {
             
             Text("No Favorites Yet")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.isDarkMode ? .white : .black)
             
             Text("Start exploring and save your favorite cosmic moments!")
                 .font(.system(size: 16))
-                .foregroundColor(.white.opacity(0.7))
+                .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.7) : .black.opacity(0.7))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 40)
         }
@@ -161,4 +166,5 @@ class FavoritesViewModel: ObservableObject {
 
 #Preview {
     FavoritesView()
+        .environmentObject(ThemeManager.shared)
 }

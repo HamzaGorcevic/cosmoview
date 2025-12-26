@@ -1,0 +1,36 @@
+### Variables
+@baseUrl = http://localhost:3000
+@userId = 8a705131-594d-4288-9467-2385b1e308f7
+
+### Create a new user post
+# Note: This requires a multipart/form-data request. 
+# Most REST clients (like VS Code REST Client) support the syntax below.
+POST {{baseUrl}}/user-post
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="title"
+
+My Awesome Space Discovery
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+I found a new nebula while looking through my telescope today!
+--WebAppBoundary
+Content-Disposition: form-data; name="user_id"
+
+{{userId}}
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="nebula.jpg"
+Content-Type: image/jpeg
+
+< ./nebula.jpg
+--WebAppBoundary--
+
+### Get all user posts
+GET {{baseUrl}}/user-post
+Accept: application/json
+
+### Get posts by user ID
+GET {{baseUrl}}/user-post/user/{{userId}}
+Accept: application/json

@@ -49,5 +49,11 @@ struct APIConfig {
         static func comment(_ commentId: String) -> String {
             "/comments/\(commentId)"
         }
+        
+        // User Posts
+        static let userPosts = "/user-post"
+        static func userPostsByUser(_ userId: String) -> String {
+            "/user-post/user/\(userId)"
+        }
     }
 }

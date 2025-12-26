@@ -5,8 +5,8 @@ import { SupabaseModule } from 'src/supabase/supabase.module';
 import { SupabaseService } from 'src/supabase/supabase.service';
 
 @Module({
-    imports:[SupabaseModule],
-    controllers:[AuthController],
-    providers:[AuthService,SupabaseService]
+    imports: [SupabaseModule],
+    controllers: [AuthController],
+    providers: [AuthService]
 })
-export class AuthModule {}
+export class AuthModule { }

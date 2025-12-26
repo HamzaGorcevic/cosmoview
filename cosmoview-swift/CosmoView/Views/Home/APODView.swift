@@ -2,15 +2,19 @@ import SwiftUI
 
 struct APODView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel = APODViewModel()
     
     var body: some View {
         ZStack {
             // Background
             LinearGradient(
-                colors: [
+                colors: themeManager.isDarkMode ? [
                     Color(red: 0.05, green: 0.05, blue: 0.2),
                     Color(red: 0.0, green: 0.0, blue: 0.1)
+                ] : [
+                    Color(red: 0.95, green: 0.95, blue: 1.0),
+                    Color(red: 0.9, green: 0.9, blue: 1.0)
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -19,7 +23,7 @@ struct APODView: View {
             
             if viewModel.isLoading {
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .progressViewStyle(CircularProgressViewStyle(tint: themeManager.isDarkMode ? .white : .black))
                     .scaleEffect(1.5)
             } else if let post = viewModel.apod {
                 PostDetailView(post: post)
@@ -32,7 +36,7 @@ struct APODView: View {
                     Button("Close") {
                         dismiss()
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(themeManager.isDarkMode ? .white : .black)
                 }
             }
         }
@@ -81,4 +85,5 @@ class APODViewModel: ObservableObject {
 
 #Preview {
     APODView()
+        .environmentObject(ThemeManager.shared)
 }

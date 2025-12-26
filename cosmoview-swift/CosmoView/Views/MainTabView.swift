@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @State private var selectedTab = 0
     
     var body: some View {
@@ -10,11 +11,14 @@ struct MainTabView: View {
                 HomeView()
                     .tag(0)
                 
-                FavoritesView()
+                CommunityView()
                     .tag(1)
                 
-                ProfileView()
+                FavoritesView()
                     .tag(2)
+                
+                ProfileView()
+                    .tag(3)
             }
             #if os(iOS)
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -30,6 +34,7 @@ struct MainTabView: View {
 
 // MARK: - Custom Tab Bar
 struct CustomTabBar: View {
+    @EnvironmentObject var themeManager: ThemeManager
     @Binding var selectedTab: Int
     
     var body: some View {
@@ -43,29 +48,37 @@ struct CustomTabBar: View {
             }
             
             TabBarButton(
-                icon: "star.fill",
-                title: "Favorites",
+                icon: "globe",
+                title: "Community",
                 isSelected: selectedTab == 1
             ) {
                 selectedTab = 1
             }
             
             TabBarButton(
-                icon: "person.fill",
-                title: "Profile",
+                icon: "star.fill",
+                title: "Favorites",
                 isSelected: selectedTab == 2
             ) {
                 selectedTab = 2
+            }
+            
+            TabBarButton(
+                icon: "person.fill",
+                title: "Profile",
+                isSelected: selectedTab == 3
+            ) {
+                selectedTab = 3
             }
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 20)
         .background(
             RoundedRectangle(cornerRadius: 25)
-                .fill(Color(red: 0.1, green: 0.1, blue: 0.2))
+                .fill(themeManager.isDarkMode ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 25)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                        .stroke(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.1), lineWidth: 1)
                 )
                 .shadow(color: .black.opacity(0.3), radius: 20, y: 10)
         )
@@ -75,6 +88,7 @@ struct CustomTabBar: View {
 
 // MARK: - Tab Bar Button
 struct TabBarButton: View {
+    @EnvironmentObject var themeManager: ThemeManager
     let icon: String
     let title: String
     let isSelected: Bool
@@ -93,7 +107,7 @@ struct TabBarButton: View {
                             endPoint: .bottomTrailing
                         ) :
                         LinearGradient(
-                            colors: [.white.opacity(0.5)],
+                            colors: [themeManager.isDarkMode ? .white.opacity(0.5) : .black.opacity(0.5)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -103,13 +117,13 @@ struct TabBarButton: View {
                 
                 Text(title)
                     .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
-                    .foregroundColor(isSelected ? .white : .white.opacity(0.5))
+                    .foregroundColor(isSelected ? (themeManager.isDarkMode ? .white : .black) : (themeManager.isDarkMode ? .white.opacity(0.5) : .black.opacity(0.5)))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .background(
                 RoundedRectangle(cornerRadius: 15)
-                    .fill(isSelected ? Color.white.opacity(0.1) : Color.clear)
+                    .fill(isSelected ? (themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.05)) : Color.clear)
             )
         }
     }
@@ -118,4 +132,5 @@ struct TabBarButton: View {
 #Preview {
     MainTabView()
         .environmentObject(AuthenticationManager.shared)
+        .environmentObject(ThemeManager.shared)
 }
