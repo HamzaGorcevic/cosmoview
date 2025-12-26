@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { SupabaseService } from 'src/supabase/supabase.service';
+
 @Injectable()
 export class NasaService {
     private readonly apiKey = process.env.NASA_API_KEY;
@@ -9,10 +10,12 @@ export class NasaService {
     constructor(private readonly httpService: HttpService, private readonly supabaseService: SupabaseService) {
     }
     async getAstronomyPictureOfTheDay(date?: string) {
+        let d = date || new Date().toISOString().split('T')[0];
+        const existingPost = await this.getPostByDate(d);
+        if (existingPost) return existingPost;
+
         let url = `${this.baseUrl}/apod?api_key=${this.apiKey}`;
-        if (date) {
-            url += `&date=${date}`;
-        }
+        if (date) url += `&date=${date}`;
         const response = await firstValueFrom(this.httpService.get(url));
         const apodData = response.data;
 
@@ -31,18 +34,17 @@ export class NasaService {
             media_type: apodData.media_type || null,
             service_version: apodData.service_version || null,
             copyright: apodData.copyright || null,
+            created_at: new Date().toISOString()
         };
 
-        // Check if post already exists
         const { data: existingPost } = await this.supabaseService.getClient()
             .from('nasa_posts')
-            .select('id')
+            .select('*')
             .eq('date', postData.date)
             .single();
 
         if (existingPost) {
-            // Update existing post
-            const { error } = await this.supabaseService.getClient()
+            const { data, error } = await this.supabaseService.getClient()
                 .from('nasa_posts')
                 .update({ ...postData, updated_at: new Date().toISOString() })
                 .eq('date', postData.date);
@@ -51,8 +53,7 @@ export class NasaService {
                 console.error('Error updating post:', error);
             }
         } else {
-            // Insert new post
-            const { error } = await this.supabaseService.getClient()
+            const { data, error } = await this.supabaseService.getClient()
                 .from('nasa_posts')
                 .insert([postData]);
 
@@ -73,12 +74,10 @@ export class NasaService {
             console.error('Error fetching post:', error);
             return null;
         }
-
         return data;
     }
 
     async getAllPosts(limit: number = 10, offset: number = 0) {
-        // First, get posts from database
         const { data, error } = await this.supabaseService.getClient()
             .from('nasa_posts')
             .select('*')
@@ -94,6 +93,7 @@ export class NasaService {
 
         // If we don't have enough posts, fetch more from NASA API
         const minimumPosts = 20;
+
         if (offset === 0 && posts.length < minimumPosts) {
             console.log(`Only ${posts.length} posts in DB, fetching more from NASA API...`);
 
@@ -131,5 +131,4 @@ export class NasaService {
 
         return posts;
     }
-
 }

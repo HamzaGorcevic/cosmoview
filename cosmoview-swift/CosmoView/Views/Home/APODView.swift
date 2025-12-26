@@ -59,25 +59,20 @@ class APODViewModel: ObservableObject {
         Task {
             do {
                 let response = try await APIService.shared.getAPOD()
+                print("hello world")
+                print(response)
+                
                 if response.status, let post = response.data {
                     apod = post
+                } else {
+                    errorMessage = "Invalid response from server."
                 }
+                
             } catch {
-                // If today's APOD fails (likely 404), try yesterday's
-                do {
-                    let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "yyyy-MM-dd"
-                    let dateString = formatter.string(from: yesterday)
-                    
-                    let response = try await APIService.shared.getAPOD(date: dateString)
-                    if response.status, let post = response.data {
-                        apod = post
-                    }
-                } catch {
-                    errorMessage = "Failed to load picture: \(error.localizedDescription)"
-                }
+                print("⛔ APOD ERROR:", error)
+                errorMessage = error.localizedDescription
             }
+            
             isLoading = false
         }
     }
