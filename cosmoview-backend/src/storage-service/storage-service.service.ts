@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseService } from 'src/supabase/supabase.service';
 import * as fs from 'fs';
+import sharp from 'sharp';
+
 @Injectable()
 export class StorageServiceService {
     private readonly bucketName = 'user_posts';
@@ -11,12 +13,26 @@ export class StorageServiceService {
 
     async uploadFile(file: Express.Multer.File) {
         const fileName = `${Date.now()}_${file.originalname}`;
-        const fileBody = file.buffer || fs.readFileSync(file.path);
+        let fileBody = file.buffer || fs.readFileSync(file.path);
+
+        // Compress image using sharp
+        try {
+            fileBody = await sharp(fileBody)
+                .resize(1200, 1200, {
+                    fit: 'inside',
+                    withoutEnlargement: true
+                })
+                .jpeg({ quality: 80 })
+                .toBuffer();
+        } catch (error) {
+            console.error('Error compressing image:', error);
+            // If compression fails, use original file
+        }
 
         const { data, error } = await this.supabaseService.getClient().storage
             .from(this.bucketName)
             .upload(fileName, fileBody, {
-                contentType: file.mimetype,
+                contentType: 'image/jpeg',
                 cacheControl: '3600',
                 upsert: false,
             });

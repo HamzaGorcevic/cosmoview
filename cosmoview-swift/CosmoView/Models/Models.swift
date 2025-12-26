@@ -127,3 +127,47 @@ struct UserPost: Codable, Identifiable {
 struct UserSummary: Codable {
     let username: String
 }
+
+// MARK: - User Post Like Model
+struct UserPostLike: Codable, Identifiable {
+    let id: String
+    let userId: String
+    let postId: String
+    let createdAt: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case userId = "user_id"
+        case postId = "post_id"
+        case createdAt = "created_at"
+    }
+}
+
+// MARK: - User Post Comment Model
+struct UserPostComment: Codable, Identifiable {
+    let id: String
+    let userId: String
+    let postId: String
+    let content: String
+    let createdAt: String
+    let users: UserSummary?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, content, users
+        case userId = "user_id"
+        case postId = "post_id"
+        case createdAt = "created_at"
+    }
+}
+
+// MARK: - User Post Like Check Response
+struct UserPostLikeCheckResponse: Codable {
+    let status: Bool
+    let isLiked: Bool
+}
+
+// MARK: - User Post Count Response
+struct UserPostCountResponse: Codable {
+    let status: Bool
+    let count: Int
+}

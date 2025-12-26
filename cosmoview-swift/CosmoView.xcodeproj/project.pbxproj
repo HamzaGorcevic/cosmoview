@@ -24,6 +24,13 @@
 		A100010E1C00000000000001 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020E1C00000000000001 /* ChangePasswordView.swift */; };
 		A100010F1C00000000000001 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100020F1C00000000000001 /* ProfileView.swift */; };
 		A10001101C00000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10002101C00000000000001 /* Assets.xcassets */; };
+		FA67D9C32EFF0D3D001EE2DD /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9C22EFF0D3D001EE2DD /* ThemeManager.swift */; };
+		FA67D9C92EFF0DA6001EE2DD /* MyPostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9C62EFF0DA6001EE2DD /* MyPostsView.swift */; };
+		FA67D9CA2EFF0DA6001EE2DD /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9C42EFF0DA6001EE2DD /* CommunityView.swift */; };
+		FA67D9CB2EFF0DA6001EE2DD /* UserPostCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9C72EFF0DA6001EE2DD /* UserPostCard.swift */; };
+		FA67D9CC2EFF0DA6001EE2DD /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9C52EFF0DA6001EE2DD /* CreatePostView.swift */; };
+		FA67D9CE2EFF0E9F001EE2DD /* AccountDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9CD2EFF0E9F001EE2DD /* AccountDetailsView.swift */; };
+		FA67D9D02EFF13A7001EE2DD /* UserPostCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9CF2EFF13A7001EE2DD /* UserPostCommentsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +52,13 @@
 		A100020E1C00000000000001 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
 		A100020F1C00000000000001 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		A10002101C00000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FA67D9C22EFF0D3D001EE2DD /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		FA67D9C42EFF0DA6001EE2DD /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
+		FA67D9C52EFF0DA6001EE2DD /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
+		FA67D9C62EFF0DA6001EE2DD /* MyPostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPostsView.swift; sourceTree = "<group>"; };
+		FA67D9C72EFF0DA6001EE2DD /* UserPostCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCard.swift; sourceTree = "<group>"; };
+		FA67D9CD2EFF0E9F001EE2DD /* AccountDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailsView.swift; sourceTree = "<group>"; };
+		FA67D9CF2EFF13A7001EE2DD /* UserPostCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCommentsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +131,7 @@
 		A10004061C00000000000001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA67D9C82EFF0DA6001EE2DD /* UserPosts */,
 				A10004081C00000000000001 /* Auth */,
 				A10004091C00000000000001 /* Home */,
 				A100040A1C00000000000001 /* Favorites */,
@@ -129,6 +144,7 @@
 		A10004071C00000000000001 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				FA67D9C22EFF0D3D001EE2DD /* ThemeManager.swift */,
 				A10002041C00000000000001 /* APIConfig.swift */,
 			);
 			path = Utilities;
@@ -164,10 +180,23 @@
 		A100040B1C00000000000001 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				FA67D9CD2EFF0E9F001EE2DD /* AccountDetailsView.swift */,
 				A100020E1C00000000000001 /* ChangePasswordView.swift */,
 				A100020F1C00000000000001 /* ProfileView.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		FA67D9C82EFF0DA6001EE2DD /* UserPosts */ = {
+			isa = PBXGroup;
+			children = (
+				FA67D9CF2EFF13A7001EE2DD /* UserPostCommentsView.swift */,
+				FA67D9C42EFF0DA6001EE2DD /* CommunityView.swift */,
+				FA67D9C62EFF0DA6001EE2DD /* MyPostsView.swift */,
+				FA67D9C52EFF0DA6001EE2DD /* CreatePostView.swift */,
+				FA67D9C72EFF0DA6001EE2DD /* UserPostCard.swift */,
+			);
+			path = UserPosts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,15 +273,22 @@
 				A10001021C00000000000001 /* APIService.swift in Sources */,
 				A10001031C00000000000001 /* AuthenticationManager.swift in Sources */,
 				A10001041C00000000000001 /* APIConfig.swift in Sources */,
+				FA67D9CE2EFF0E9F001EE2DD /* AccountDetailsView.swift in Sources */,
 				A10001051C00000000000001 /* HomeViewModel.swift in Sources */,
 				A10001061C00000000000001 /* PostDetailViewModel.swift in Sources */,
 				A10001071C00000000000001 /* LoginView.swift in Sources */,
 				A10001081C00000000000001 /* RegisterView.swift in Sources */,
 				A10001091C00000000000001 /* FavoritesView.swift in Sources */,
+				FA67D9C32EFF0D3D001EE2DD /* ThemeManager.swift in Sources */,
 				A100010A1C00000000000001 /* APODView.swift in Sources */,
+				FA67D9C92EFF0DA6001EE2DD /* MyPostsView.swift in Sources */,
+				FA67D9CA2EFF0DA6001EE2DD /* CommunityView.swift in Sources */,
+				FA67D9CB2EFF0DA6001EE2DD /* UserPostCard.swift in Sources */,
+				FA67D9CC2EFF0DA6001EE2DD /* CreatePostView.swift in Sources */,
 				A100010B1C00000000000001 /* HomeView.swift in Sources */,
 				A100010C1C00000000000001 /* PostDetailView.swift in Sources */,
 				A100010D1C00000000000001 /* MainTabView.swift in Sources */,
+				FA67D9D02EFF13A7001EE2DD /* UserPostCommentsView.swift in Sources */,
 				A100010E1C00000000000001 /* ChangePasswordView.swift in Sources */,
 				A100010F1C00000000000001 /* ProfileView.swift in Sources */,
 			);
@@ -319,11 +355,11 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -378,11 +414,11 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};

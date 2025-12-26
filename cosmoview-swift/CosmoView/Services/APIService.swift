@@ -206,4 +206,47 @@ class APIService {
         let response: [UserPost] = try await request(endpoint: APIConfig.Endpoints.userPostsByUser(userId))
         return response
     }
+    
+    func getAllUserPosts() async throws -> [UserPost] {
+        let response: [UserPost] = try await request(endpoint: APIConfig.Endpoints.userPosts)
+        return response
+    }
+    
+    // MARK: - User Post Likes
+    func likeUserPost(userId: String, postId: String) async throws -> APIResponse<String> {
+        let body: [String: Any] = ["userId": userId, "postId": postId]
+        return try await request(endpoint: APIConfig.Endpoints.userPostLikes, method: "POST", body: body)
+    }
+    
+    func unlikeUserPost(userId: String, postId: String) async throws -> APIResponse<String> {
+        let body: [String: Any] = ["userId": userId, "postId": postId]
+        return try await request(endpoint: APIConfig.Endpoints.userPostLikes, method: "DELETE", body: body)
+    }
+    
+    func checkIfUserPostLiked(userId: String, postId: String) async throws -> UserPostLikeCheckResponse {
+        return try await request(endpoint: APIConfig.Endpoints.checkUserPostLike(userId: userId, postId: postId))
+    }
+    
+    func getUserPostLikeCount(postId: String) async throws -> UserPostCountResponse {
+        return try await request(endpoint: APIConfig.Endpoints.userPostLikeCount(postId))
+    }
+    
+    // MARK: - User Post Comments
+    func createUserPostComment(userId: String, postId: String, content: String) async throws -> APIResponse<UserPostComment> {
+        let body: [String: Any] = ["userId": userId, "postId": postId, "content": content]
+        return try await request(endpoint: APIConfig.Endpoints.userPostComments, method: "POST", body: body)
+    }
+    
+    func getUserPostComments(postId: String) async throws -> APIResponse<[UserPostComment]> {
+        return try await request(endpoint: APIConfig.Endpoints.userPostCommentsForPost(postId))
+    }
+    
+    func deleteUserPostComment(commentId: String, userId: String) async throws -> APIResponse<String> {
+        let body: [String: Any] = ["userId": userId]
+        return try await request(endpoint: APIConfig.Endpoints.userPostComment(commentId), method: "DELETE", body: body)
+    }
+    
+    func getUserPostCommentCount(postId: String) async throws -> UserPostCountResponse {
+        return try await request(endpoint: APIConfig.Endpoints.userPostCommentCount(postId))
+    }
 }

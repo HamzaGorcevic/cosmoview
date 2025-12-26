@@ -137,14 +137,6 @@ struct ProfileView: View {
                             }
                             
                             ProfileMenuItem(
-                                icon: "info.circle.fill",
-                                title: "About",
-                                color: .purple
-                            ) {
-                                // Show about
-                            }
-                            
-                            ProfileMenuItem(
                                 icon: "arrow.right.square.fill",
                                 title: "Logout",
                                 color: .red

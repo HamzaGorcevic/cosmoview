@@ -1,14 +1,16 @@
 import SwiftUI
 
 struct MyPostsView: View {
+    @EnvironmentObject var authManager: AuthenticationManager
     @State private var posts: [UserPost] = []
     @State private var isLoading = false
     @State private var errorMessage: String?
+    @Environment(\.dismiss) var dismiss
     @State private var showingCreatePost = false
     
     var body: some View {
         NavigationView {
-            Group {
+            ZStack {
                 if isLoading {
                     ProgressView("Loading your posts...")
                 } else if let errorMessage {
@@ -51,6 +53,7 @@ struct MyPostsView: View {
                         LazyVStack(spacing: 20) {
                             ForEach(posts) { post in
                                 UserPostCard(post: post)
+                                    .environmentObject(AuthenticationManager.shared)
                             }
                         }
                         .padding()
@@ -61,39 +64,53 @@ struct MyPostsView: View {
                 }
             }
             .navigationTitle("My Posts")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { dismiss() }) {
+                        Text("Close")
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingCreatePost = true }) {
                         Image(systemName: "plus")
                     }
                 }
             }
-            .sheet(isPresented: $showingCreatePost) {
-                CreatePostView()
-                    .onDisappear {
-                        fetchPosts()
-                    }
-            }
-            .onAppear {
-                fetchPosts()
-            }
+        }
+        .sheet(isPresented: $showingCreatePost) {
+            CreatePostView()
+                .onDisappear {
+                    fetchPosts()
+                }
+        }
+        .onAppear {
+            print("MyPostsView appeared")
+            fetchPosts()
         }
     }
     
     private func fetchPosts() {
-        guard let userId = AuthenticationManager.shared.currentUser?.id else { return }
+        guard let userId = authManager.userId else {
+            print("❌ No user ID found for fetching posts")
+            errorMessage = "Please log in to view your posts"
+            return
+        }
         
+        print("🔍 Fetching posts for user: \(userId)")
         isLoading = true
         errorMessage = nil
         
         Task {
             do {
                 let fetchedPosts = try await APIService.shared.getUserPosts(userId: userId)
+                print("✅ Fetched \(fetchedPosts.count) posts")
                 await MainActor.run {
                     self.posts = fetchedPosts
                     self.isLoading = false
                 }
             } catch {
+                print("❌ Error fetching user posts: \(error)")
                 await MainActor.run {
                     self.errorMessage = error.localizedDescription
                     self.isLoading = false

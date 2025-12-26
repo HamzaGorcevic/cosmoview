@@ -66,17 +66,22 @@ struct CommunityView: View {
         isLoading = true
         errorMessage = nil
         
+        print("🔍 Fetching all user posts...")
+        
         Task {
             do {
-                // We'll use the GET /user-post endpoint which returns all posts
-                let response: [UserPost] = try await APIService.shared.request(endpoint: APIConfig.Endpoints.userPosts)
+                // Fetch all user posts from the community
+                let response = try await APIService.shared.getAllUserPosts()
+                print("✅ Successfully fetched \(response.count) posts")
                 await MainActor.run {
                     self.posts = response
                     self.isLoading = false
                 }
             } catch {
+                print("❌ Error fetching posts: \(error)")
+                print("❌ Error details: \(error.localizedDescription)")
                 await MainActor.run {
-                    self.errorMessage = error.localizedDescription
+                    self.errorMessage = "Failed to load posts: \(error.localizedDescription)"
                     self.isLoading = false
                 }
             }

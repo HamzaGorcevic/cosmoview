@@ -47,7 +47,7 @@ struct APIConfig {
             "/comments/comment/\(commentId)/replies"
         }
         static func comment(_ commentId: String) -> String {
-            "/comments/\(commentId)"
+            "/comment   s/\(commentId)"
         }
         
         // User Posts
@@ -55,5 +55,30 @@ struct APIConfig {
         static func userPostsByUser(_ userId: String) -> String {
             "/user-post/user/\(userId)"
         }
+        
+        // User Post Likes
+        static let userPostLikes = "/user-post-likes"
+        static func userPostLikesForPost(_ postId: String) -> String {
+            "/user-post-likes/post/\(postId)"
+        }
+        static func checkUserPostLike(userId: String, postId: String) -> String {
+            "/user-post-likes/check/\(userId)/\(postId)"
+        }
+        static func userPostLikeCount(_ postId: String) -> String {
+            "/user-post-likes/count/\(postId)"
+        }
+        
+        // User Post Comments
+        static let userPostComments = "/user-post-comments"
+        static func userPostCommentsForPost(_ postId: String) -> String {
+            "/user-post-comments/post/\(postId)"
+        }
+        static func userPostCommentCount(_ postId: String) -> String {
+            "/user-post-comments/count/\(postId)"
+        }
+        static func userPostComment(_ commentId: String) -> String {
+            "/user-post-comments/\(commentId)"
+        }
     }
 }
+    		

@@ -12,6 +12,8 @@ import { CommentsModule } from './comments/comments.module';
 import { UserPostModule } from './user-post/user-post.module';
 import { MulterModule } from '@nestjs/platform-express/multer';
 import { StorageModule } from './storage-service/storage.module';
+import { UserPostLikesModule } from './user-post-likes/user-post-likes.module';
+import { UserPostCommentsModule } from './user-post-comments/user-post-comments.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { StorageModule } from './storage-service/storage.module';
     MulterModule.register({
       dest: './uploads',
     }),
+    UserPostLikesModule,
+    UserPostCommentsModule,
   ],
   controllers: [AppController],
   providers: [
