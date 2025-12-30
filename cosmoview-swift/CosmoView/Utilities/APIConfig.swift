@@ -47,7 +47,7 @@ struct APIConfig {
             "/comments/comment/\(commentId)/replies"
         }
         static func comment(_ commentId: String) -> String {
-            "/comment   s/\(commentId)"
+            "/comments/\(commentId)"
         }
         
         // User Posts
@@ -79,6 +79,10 @@ struct APIConfig {
         static func userPostComment(_ commentId: String) -> String {
             "/user-post-comments/\(commentId)"
         }
+        
+        // AI Quiz
+        static let aiQuiz = "/ai-quiz"
+        static let submitQuiz = "/ai-quiz/submit"
     }
 }
     		

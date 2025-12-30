@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly supabaseService: SupabaseService) {}
+  constructor(private readonly supabaseService: SupabaseService) { }
 
   async createUser(username: string, email: string, password: string) {
     const { data: existingUser, error: fetchError } = await this.supabaseService.getClient()
@@ -35,13 +35,14 @@ export class AuthService {
       return { status: false, message: 'Failed to create user', data: null };
     }
 
-    return { 
-      status: true, 
-      message: 'User created successfully', 
+    return {
+      status: true,
+      message: 'User created successfully',
       data: {
         id: data.id,
         username: data.username,
         email: data.email,
+        totalPoints: data.total_points || 0,
         createdAt: data.created_at,
         updatedAt: data.updated_at
       }
@@ -65,13 +66,14 @@ export class AuthService {
       return { status: false, message: 'Invalid password', data: null };
     }
 
-    return { 
-      status: true, 
-      message: 'Login successful', 
+    return {
+      status: true,
+      message: 'Login successful',
       data: {
         id: user.id,
         username: user.username,
         email: user.email,
+        totalPoints: user.total_points || 0,
         createdAt: user.created_at,
         updatedAt: user.updated_at
       }
@@ -109,9 +111,9 @@ export class AuthService {
       return { status: false, message: 'Failed to update password', data: null };
     }
 
-    return { 
-      status: true, 
-      message: 'Password changed successfully', 
+    return {
+      status: true,
+      message: 'Password changed successfully',
       data: {
         id: updatedUser.id,
         username: updatedUser.username,

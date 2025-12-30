@@ -13,9 +13,10 @@ export class AiQuizService {
         private configService: ConfigService,
     ) { }
 
-    async getAiQuiz() {
+    async getAiQuiz(userId?: string) {
         // Get today's quiz
         const today = new Date().toISOString().split('T')[0];
+
         const { data, error } = await this.supabaseService.getClient()
             .from('ai_quiz')
             .select('*')
@@ -25,30 +26,62 @@ export class AiQuizService {
         if (error) throw error;
 
         // If found, return it
-        if (data) return data;
+        let quizData = data;
 
         // If not found, trigger generation
-        this.logger.log('No quiz found for today, triggering generation...');
-        await this.handleDailyQuiz();
+        if (!quizData) {
+            this.logger.log('No quiz found for today, triggering generation...');
+            await this.handleDailyQuiz();
 
-        // Fetch again
-        const { data: newQuiz } = await this.supabaseService.getClient()
-            .from('ai_quiz')
-            .select('*')
-            .eq('quiz_date', today)
-            .maybeSingle();
+            // Fetch again
+            const { data: newQuiz } = await this.supabaseService.getClient()
+                .from('ai_quiz')
+                .select('*')
+                .eq('quiz_date', today)
+                .maybeSingle();
 
-        if (newQuiz) return newQuiz;
+            quizData = newQuiz;
+        }
 
         // Fallback to latest
-        const { data: latest } = await this.supabaseService.getClient()
-            .from('ai_quiz')
-            .select('*')
-            .order('quiz_date', { ascending: false })
-            .limit(1)
-            .maybeSingle();
+        if (!quizData) {
+            const { data: latest } = await this.supabaseService.getClient()
+                .from('ai_quiz')
+                .select('*')
+                .order('quiz_date', { ascending: false })
+                .limit(1)
+                .maybeSingle();
 
-        return latest;
+            quizData = latest;
+        }
+
+        if (!quizData) return null;
+
+        // Check if user attempted
+        let attempted = false;
+        if (userId) {
+            const { data: attempt } = await this.supabaseService.getClient()
+                .from('user_quiz_attempts')
+                .select('*')
+                .eq('user_id', userId)
+                .eq('quiz_id', quizData.id)
+                .maybeSingle();
+
+            if (attempt) attempted = true;
+        }
+
+        // Calculate next update (Midnight of next day)
+        // Parse current quiz date
+        const quizDate = new Date(quizData.quiz_date);
+        const nextDate = new Date(quizDate);
+        nextDate.setDate(nextDate.getDate() + 1);
+        nextDate.setUTCHours(0, 0, 0, 0);
+
+        return {
+            ...quizData,
+            attempted,
+            next_update: nextDate.toISOString()
+        };
     }
 
     @Cron('0 0 * * *')
@@ -89,17 +122,22 @@ export class AiQuizService {
     }
 
     private async generateQuizFromAI(): Promise<{ question: string; options: string[]; correct_answer: string }> {
-        const apiKey = this.configService.get('AZURE_OPENAI_API_KEY');
+        const apiKey = this.configService.get<string>('AZURE_OPENAI_API_KEY');
+
         if (!apiKey) {
             this.logger.warn('No AZURE_OPENAI_API_KEY found, using mock data.');
             return {
-                question: 'Which planet is known as the Red Planet?',
-                options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
-                correct_answer: 'Mars',
+                question: 'What is the largest planet in our solar system?',
+                options: ['Earth', 'Mars', 'Jupiter', 'Saturn'],
+                correct_answer: 'Jupiter',
             };
         }
 
-        const prompt = `Generate 1 simple trivia question about the universe, cosmos, stars, or planets. 
+        const topics = ['Galaxies', 'Black Holes', 'Supernovas', 'Moons', 'Comets', 'Exoplanets', 'NASA History'];
+        const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+
+        const prompt = `Generate 1 unique and interesting trivia question about the universe, specifically about: ${randomTopic}. 
+        Avoid extremely common or very easy questions like "Which planet is the red planet?".
         Provide exactly 4 distinct options. 
         The output MUST be a raw JSON object with no markdown formatting.
         The JSON object must strictly adhere to this schema:

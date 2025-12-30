@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AiQuizService } from './ai-quiz.service';
 import { SubmitQuizDto } from './dto/submit-quiz.dto';
 
@@ -7,8 +7,8 @@ export class AiQuizController {
     constructor(private readonly aiQuizService: AiQuizService) { }
 
     @Get()
-    async getDailyQuiz() {
-        return this.aiQuizService.getAiQuiz();
+    async getDailyQuiz(@Query('userId') userId?: string) {
+        return this.aiQuizService.getAiQuiz(userId);
     }
 
     @Post('submit')

@@ -31,6 +31,8 @@
 		FA67D9CC2EFF0DA6001EE2DD /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9C52EFF0DA6001EE2DD /* CreatePostView.swift */; };
 		FA67D9CE2EFF0E9F001EE2DD /* AccountDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9CD2EFF0E9F001EE2DD /* AccountDetailsView.swift */; };
 		FA67D9D02EFF13A7001EE2DD /* UserPostCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9CF2EFF13A7001EE2DD /* UserPostCommentsView.swift */; };
+		FAD1968D2F048FE10086FD84 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1968C2F048FE10086FD84 /* QuizViewModel.swift */; };
+		FAD196902F0490210086FD84 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1968E2F0490210086FD84 /* QuizView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +61,8 @@
 		FA67D9C72EFF0DA6001EE2DD /* UserPostCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCard.swift; sourceTree = "<group>"; };
 		FA67D9CD2EFF0E9F001EE2DD /* AccountDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailsView.swift; sourceTree = "<group>"; };
 		FA67D9CF2EFF13A7001EE2DD /* UserPostCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCommentsView.swift; sourceTree = "<group>"; };
+		FAD1968C2F048FE10086FD84 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
+		FAD1968E2F0490210086FD84 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +126,7 @@
 		A10004051C00000000000001 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				FAD1968C2F048FE10086FD84 /* QuizViewModel.swift */,
 				A10002051C00000000000001 /* HomeViewModel.swift */,
 				A10002061C00000000000001 /* PostDetailViewModel.swift */,
 			);
@@ -131,6 +136,7 @@
 		A10004061C00000000000001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FAD1968F2F0490210086FD84 /* Quiz */,
 				FA67D9C82EFF0DA6001EE2DD /* UserPosts */,
 				A10004081C00000000000001 /* Auth */,
 				A10004091C00000000000001 /* Home */,
@@ -197,6 +203,14 @@
 				FA67D9C72EFF0DA6001EE2DD /* UserPostCard.swift */,
 			);
 			path = UserPosts;
+			sourceTree = "<group>";
+		};
+		FAD1968F2F0490210086FD84 /* Quiz */ = {
+			isa = PBXGroup;
+			children = (
+				FAD1968E2F0490210086FD84 /* QuizView.swift */,
+			);
+			path = Quiz;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,7 +284,9 @@
 			files = (
 				A10001001C00000000000001 /* CosmoViewApp.swift in Sources */,
 				A10001011C00000000000001 /* Models.swift in Sources */,
+				FAD196902F0490210086FD84 /* QuizView.swift in Sources */,
 				A10001021C00000000000001 /* APIService.swift in Sources */,
+				FAD1968D2F048FE10086FD84 /* QuizViewModel.swift in Sources */,
 				A10001031C00000000000001 /* AuthenticationManager.swift in Sources */,
 				A10001041C00000000000001 /* APIConfig.swift in Sources */,
 				FA67D9CE2EFF0E9F001EE2DD /* AccountDetailsView.swift in Sources */,

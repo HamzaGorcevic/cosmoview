@@ -4,6 +4,7 @@ struct HomeView: View {
     @EnvironmentObject var themeManager: ThemeManager
     @StateObject private var viewModel = HomeViewModel()
     @State private var showAPOD = false
+    @State private var showQuiz = false
     
     var body: some View {
         ZStack {
@@ -58,6 +59,33 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
+                .padding(.bottom, 10)
+                
+                // Daily Quiz Banner
+                Button(action: { showQuiz = true }) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Daily Cosmos Quiz")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                            Text("Test your knowledge & earn points!")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                        Spacer()
+                        Image(systemName: "brain.head.profile")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                    .background(
+                        LinearGradient(colors: [.indigo, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    )
+                    .cornerRadius(16)
+                    .shadow(color: .indigo.opacity(0.3), radius: 8, y: 4)
+                }
+                .padding(.horizontal, 24)
                 .padding(.bottom, 20)
                 
                 // Posts List
@@ -102,6 +130,9 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showAPOD) {
             APODView()
+        }
+        .sheet(isPresented: $showQuiz) {
+            QuizView()
         }
         .onAppear {
             if viewModel.posts.isEmpty {

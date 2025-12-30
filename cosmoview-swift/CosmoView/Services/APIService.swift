@@ -249,4 +249,22 @@ class APIService {
     func getUserPostCommentCount(postId: String) async throws -> UserPostCountResponse {
         return try await request(endpoint: APIConfig.Endpoints.userPostCommentCount(postId))
     }
+    
+    // MARK: - AI Quiz
+    func getDailyQuiz(userId: String? = nil) async throws -> Quiz {
+        var endpoint = APIConfig.Endpoints.aiQuiz
+        if let userId = userId {
+            endpoint += "?userId=\(userId)"
+        }
+        return try await request(endpoint: endpoint)
+    }
+    
+    func submitQuiz(userId: String, quizId: String, answer: String) async throws -> QuizSubmissionResponse {
+        let body: [String: Any] = [
+            "userId": userId,
+            "quizId": quizId,
+            "answer": answer
+        ]
+        return try await request(endpoint: APIConfig.Endpoints.submitQuiz, method: "POST", body: body)
+    }
 }

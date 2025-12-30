@@ -5,11 +5,12 @@ struct User: Codable, Identifiable {
     let id: String
     let username: String
     let email: String
+    let totalPoints: Int?
     let createdAt: String?
     let updatedAt: String?
     
     enum CodingKeys: String, CodingKey {
-        case id, username, email
+        case id, username, email, totalPoints
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
@@ -167,7 +168,29 @@ struct UserPostLikeCheckResponse: Codable {
 }
 
 // MARK: - User Post Count Response
+// MARK: - User Post Count Response
 struct UserPostCountResponse: Codable {
     let status: Bool
     let count: Int
+}
+
+struct Quiz: Codable, Identifiable {
+    let id: String
+    let question: String
+    let options: [String]
+    let correctDate: String?
+    let nextUpdate: String?
+    let attempted: Bool?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, question, options 
+        case correctDate = "quiz_date"
+        case nextUpdate = "next_update"
+        case attempted
+    }
+}
+
+struct QuizSubmissionResponse: Codable {
+    let correct: Bool
+    let points: Int
 }
