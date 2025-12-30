@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LikesModule } from './likes/likes.module';
@@ -14,10 +15,12 @@ import { MulterModule } from '@nestjs/platform-express/multer';
 import { StorageModule } from './storage-service/storage.module';
 import { UserPostLikesModule } from './user-post-likes/user-post-likes.module';
 import { UserPostCommentsModule } from './user-post-comments/user-post-comments.module';
+import { AiQuizModule } from './ai-quiz/ai-quiz.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     LikesModule,
     AuthModule,
     NasaModule,
@@ -32,9 +35,11 @@ import { UserPostCommentsModule } from './user-post-comments/user-post-comments.
     }),
     UserPostLikesModule,
     UserPostCommentsModule,
+    AiQuizModule,
   ],
   controllers: [AppController],
   providers: [
+    AppService,
     AppService,
   ],
 })
