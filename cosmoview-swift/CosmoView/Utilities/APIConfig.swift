@@ -10,6 +10,10 @@ struct APIConfig {
         static let login = "/auth/login"
         static let changePassword = "/auth/change-password"
         
+        static func completeOnboarding(_ userId: String) -> String {
+            "/users/\(userId)/onboarding"
+        }
+        
         // NASA
         static let apod = "/nasa/apod"
         static let posts = "/nasa/posts"
@@ -83,6 +87,10 @@ struct APIConfig {
         // AI Quiz
         static let aiQuiz = "/ai-quiz"
         static let submitQuiz = "/ai-quiz/submit"
+        
+        // Community Quiz
+        static let communityQuiz = "/community-quiz"
+        static let submitCommunityQuiz = "/community-quiz/submit"
     }
 }
     		

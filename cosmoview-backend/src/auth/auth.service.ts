@@ -27,7 +27,7 @@ export class AuthService {
     const { data, error } = await this.supabaseService.getClient()
       .from('users')
       .insert([{ username, email, password_hash: hashedPassword }])
-      .select('id, username, email, created_at, updated_at')
+      .select('id, username, email, created_at, updated_at, has_completed_onboarding')
       .single();
 
     if (error) {
@@ -43,6 +43,7 @@ export class AuthService {
         username: data.username,
         email: data.email,
         totalPoints: data.total_points || 0,
+        hasCompletedOnboarding: data.has_completed_onboarding || false,
         createdAt: data.created_at,
         updatedAt: data.updated_at
       }
@@ -74,6 +75,7 @@ export class AuthService {
         username: user.username,
         email: user.email,
         totalPoints: user.total_points || 0,
+        hasCompletedOnboarding: user.has_completed_onboarding || false,
         createdAt: user.created_at,
         updatedAt: user.updated_at
       }

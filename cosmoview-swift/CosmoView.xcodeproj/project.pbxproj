@@ -31,6 +31,9 @@
 		FA67D9CC2EFF0DA6001EE2DD /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9C52EFF0DA6001EE2DD /* CreatePostView.swift */; };
 		FA67D9CE2EFF0E9F001EE2DD /* AccountDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9CD2EFF0E9F001EE2DD /* AccountDetailsView.swift */; };
 		FA67D9D02EFF13A7001EE2DD /* UserPostCommentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA67D9CF2EFF13A7001EE2DD /* UserPostCommentsView.swift */; };
+		FA98B2482F150159001B3B35 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA98B2462F150159001B3B35 /* OnboardingView.swift */; };
+		FA98B24D2F15097C001B3B35 /* CommunityQuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA98B24C2F15097C001B3B35 /* CommunityQuizViewModel.swift */; };
+		FA98B24F2F150996001B3B35 /* CommunityQuizListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA98B24E2F150996001B3B35 /* CommunityQuizListView.swift */; };
 		FAD1968D2F048FE10086FD84 /* QuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1968C2F048FE10086FD84 /* QuizViewModel.swift */; };
 		FAD196902F0490210086FD84 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD1968E2F0490210086FD84 /* QuizView.swift */; };
 /* End PBXBuildFile section */
@@ -61,6 +64,9 @@
 		FA67D9C72EFF0DA6001EE2DD /* UserPostCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCard.swift; sourceTree = "<group>"; };
 		FA67D9CD2EFF0E9F001EE2DD /* AccountDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailsView.swift; sourceTree = "<group>"; };
 		FA67D9CF2EFF13A7001EE2DD /* UserPostCommentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPostCommentsView.swift; sourceTree = "<group>"; };
+		FA98B2462F150159001B3B35 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		FA98B24C2F15097C001B3B35 /* CommunityQuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityQuizViewModel.swift; sourceTree = "<group>"; };
+		FA98B24E2F150996001B3B35 /* CommunityQuizListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityQuizListView.swift; sourceTree = "<group>"; };
 		FAD1968C2F048FE10086FD84 /* QuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewModel.swift; sourceTree = "<group>"; };
 		FAD1968E2F0490210086FD84 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +132,7 @@
 		A10004051C00000000000001 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				FA98B24C2F15097C001B3B35 /* CommunityQuizViewModel.swift */,
 				FAD1968C2F048FE10086FD84 /* QuizViewModel.swift */,
 				A10002051C00000000000001 /* HomeViewModel.swift */,
 				A10002061C00000000000001 /* PostDetailViewModel.swift */,
@@ -136,6 +143,8 @@
 		A10004061C00000000000001 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA98B24E2F150996001B3B35 /* CommunityQuizListView.swift */,
+				FA98B2472F150159001B3B35 /* Onboarding */,
 				FAD1968F2F0490210086FD84 /* Quiz */,
 				FA67D9C82EFF0DA6001EE2DD /* UserPosts */,
 				A10004081C00000000000001 /* Auth */,
@@ -203,6 +212,14 @@
 				FA67D9C72EFF0DA6001EE2DD /* UserPostCard.swift */,
 			);
 			path = UserPosts;
+			sourceTree = "<group>";
+		};
+		FA98B2472F150159001B3B35 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				FA98B2462F150159001B3B35 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		FAD1968F2F0490210086FD84 /* Quiz */ = {
@@ -288,13 +305,16 @@
 				A10001021C00000000000001 /* APIService.swift in Sources */,
 				FAD1968D2F048FE10086FD84 /* QuizViewModel.swift in Sources */,
 				A10001031C00000000000001 /* AuthenticationManager.swift in Sources */,
+				FA98B24D2F15097C001B3B35 /* CommunityQuizViewModel.swift in Sources */,
 				A10001041C00000000000001 /* APIConfig.swift in Sources */,
 				FA67D9CE2EFF0E9F001EE2DD /* AccountDetailsView.swift in Sources */,
 				A10001051C00000000000001 /* HomeViewModel.swift in Sources */,
 				A10001061C00000000000001 /* PostDetailViewModel.swift in Sources */,
 				A10001071C00000000000001 /* LoginView.swift in Sources */,
+				FA98B2482F150159001B3B35 /* OnboardingView.swift in Sources */,
 				A10001081C00000000000001 /* RegisterView.swift in Sources */,
 				A10001091C00000000000001 /* FavoritesView.swift in Sources */,
+				FA98B24F2F150996001B3B35 /* CommunityQuizListView.swift in Sources */,
 				FA67D9C32EFF0D3D001EE2DD /* ThemeManager.swift in Sources */,
 				A100010A1C00000000000001 /* APODView.swift in Sources */,
 				FA67D9C92EFF0DA6001EE2DD /* MyPostsView.swift in Sources */,

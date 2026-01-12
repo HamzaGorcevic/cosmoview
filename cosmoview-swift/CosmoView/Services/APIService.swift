@@ -65,6 +65,11 @@ class APIService {
         return try await request(endpoint: APIConfig.Endpoints.changePassword, method: "POST", body: body)
     }
     
+    func completeOnboarding(userId: String) async throws -> APIResponse<String> {
+        let endpoint = APIConfig.Endpoints.completeOnboarding(userId)
+        return try await request(endpoint: endpoint, method: "PATCH")
+    }
+    
     func getAPOD(date: String? = nil) async throws -> APIResponse<NASAPost> {
         let endpoint = APIConfig.Endpoints.apod
         return try await request(endpoint: endpoint)
@@ -266,5 +271,29 @@ class APIService {
             "answer": answer
         ]
         return try await request(endpoint: APIConfig.Endpoints.submitQuiz, method: "POST", body: body)
+    }
+    
+    // MARK: - Community Quiz
+    func getCommunityQuizzes(userId: String) async throws -> [CommunityQuiz] {
+        return try await request(endpoint: APIConfig.Endpoints.communityQuiz + "?userId=\(userId)")
+    }
+    
+    func createCommunityQuiz(userId: String, question: String, options: [String], correctAnswer: String) async throws -> APIResponse<CommunityQuiz> {
+        let body: [String: Any] = [
+            "userId": userId,
+            "question": question,
+            "options": options,
+            "correct_answer": correctAnswer
+        ]
+        return try await request(endpoint: APIConfig.Endpoints.communityQuiz, method: "POST", body: body)
+    }
+    
+    func submitCommunityQuiz(userId: String, quizId: String, answer: String) async throws -> QuizSubmissionResponse {
+        let body: [String: Any] = [
+            "userId": userId,
+            "quizId": quizId,
+            "answer": answer
+        ]
+        return try await request(endpoint: APIConfig.Endpoints.submitCommunityQuiz, method: "POST", body: body)
     }
 }

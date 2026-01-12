@@ -19,6 +19,9 @@ struct MainTabView: View {
                 
                 ProfileView()
                     .tag(3)
+                
+                CommunityQuizListView()
+                    .tag(4)
             }
             #if os(iOS)
             .tabViewStyle(.page(indexDisplayMode: .never))
@@ -53,6 +56,14 @@ struct CustomTabBar: View {
                 isSelected: selectedTab == 1
             ) {
                 selectedTab = 1
+            }
+            
+            TabBarButton(
+                icon: "questionmark.circle.fill",
+                title: "Quizzes",
+                isSelected: selectedTab == 4
+            ) {
+                selectedTab = 4
             }
             
             TabBarButton(

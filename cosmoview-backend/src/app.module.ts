@@ -16,6 +16,7 @@ import { StorageModule } from './storage-service/storage.module';
 import { UserPostLikesModule } from './user-post-likes/user-post-likes.module';
 import { UserPostCommentsModule } from './user-post-comments/user-post-comments.module';
 import { AiQuizModule } from './ai-quiz/ai-quiz.module';
+import { CommunityQuizModule } from './community-quiz/community-quiz.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AiQuizModule } from './ai-quiz/ai-quiz.module';
     UserPostLikesModule,
     UserPostCommentsModule,
     AiQuizModule,
+    CommunityQuizModule,
   ],
   controllers: [AppController],
   providers: [

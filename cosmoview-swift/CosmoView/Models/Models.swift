@@ -6,11 +6,13 @@ struct User: Codable, Identifiable {
     let username: String
     let email: String
     let totalPoints: Int?
+    var hasCompletedOnboarding: Bool?
     let createdAt: String?
     let updatedAt: String?
     
     enum CodingKeys: String, CodingKey {
         case id, username, email, totalPoints
+        case hasCompletedOnboarding
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
@@ -193,4 +195,22 @@ struct Quiz: Codable, Identifiable {
 struct QuizSubmissionResponse: Codable {
     let correct: Bool
     let points: Int
+}
+
+struct CommunityQuiz: Codable, Identifiable {
+    let id: String
+    let question: String
+    let options: [String]
+    let correctAnswer: String
+    let creatorId: String
+    let users: UserSummary?
+    let attempted: Bool?
+    let isCorrect: Bool?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, question, options, users, attempted
+        case correctAnswer = "correct_answer"
+        case creatorId = "creator_id"
+        case isCorrect = "is_correct"
+    }
 }

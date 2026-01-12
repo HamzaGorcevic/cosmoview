@@ -9,9 +9,15 @@ struct CosmoViewApp: App {
         WindowGroup {
             Group {
                 if authManager.isAuthenticated {
-                    MainTabView()
-                        .environmentObject(authManager)
-                        .environmentObject(themeManager)
+                    if let user = authManager.currentUser, user.hasCompletedOnboarding != true {
+                         OnboardingView()
+                             .environmentObject(authManager)
+                             .environmentObject(themeManager)
+                    } else {
+                        MainTabView()
+                            .environmentObject(authManager)
+                            .environmentObject(themeManager)
+                    }
                 } else {
                     LoginView()
                         .environmentObject(authManager)

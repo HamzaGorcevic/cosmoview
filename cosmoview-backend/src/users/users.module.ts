@@ -3,8 +3,12 @@ import { UsersService } from './users.service';
 import { SupabaseModule } from 'src/supabase/supabase.module';
 import { SupabaseService } from 'src/supabase/supabase.service';
 
+import { UsersController } from './users.controller';
+
 @Module({
-  imports:[SupabaseModule],
-  providers: [UsersService,SupabaseService]
+  imports: [SupabaseModule],
+  controllers: [UsersController],
+  providers: [UsersService, SupabaseService],
+  exports: [UsersService]
 })
-export class UsersModule {}
+export class UsersModule { }

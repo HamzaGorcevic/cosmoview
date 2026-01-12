@@ -74,6 +74,21 @@ class AuthenticationManager: ObservableObject {
         }
     }
     
+    func completeOnboarding(userId: String) async throws {
+        let response = try await APIService.shared.completeOnboarding(userId: userId)
+        if response.status {
+            await MainActor.run {
+                if var user = self.currentUser {
+                    user.hasCompletedOnboarding = true
+                    self.currentUser = user
+                    self.saveAuthState()
+                }
+            }
+        } else {
+            throw AuthError.loginFailed("Failed to update onboarding status") // Reusing error for now
+        }
+    }
+    
     private func saveAuthState() {
         UserDefaults.standard.set(isAuthenticated, forKey: "isAuthenticated")
         UserDefaults.standard.set(userId, forKey: "userId")
