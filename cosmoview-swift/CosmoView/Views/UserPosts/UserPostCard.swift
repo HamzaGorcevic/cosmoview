@@ -12,142 +12,155 @@ struct UserPostCard: View {
     @State private var hasUserInteracted = false
     
     var body: some View {
-            ZStack {
-                // Background & Shadow
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(themeManager.isDarkMode ? Color(red: 0.1, green: 0.1, blue: 0.15) : Color.white)
-                    .shadow(color: Color.black.opacity(themeManager.isDarkMode ? 0.3 : 0.1), radius: 10, x: 0, y: 5)
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                Circle()
+                    .fill(LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 32, height: 32)
+                    .overlay(
+                        Text(post.users?.username.prefix(1).uppercased() ?? "?")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(.white)
+                    )
                 
-                // Content
-                VStack(alignment: .leading, spacing: 0) {
-                    // Image Section
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(post.users?.username ?? "Unknown Explorer")
+                        .font(.headline)
+                        .foregroundColor(themeManager.primaryTextColor)
+                    
+                    Text(formatDate(post.createdAt))
+                        .font(.caption)
+                        .foregroundColor(themeManager.secondaryTextColor)
+                }
+                
+                Spacer()
+            }
+            .padding(12)
+            
+            // Image
+            Color.clear
+                .aspectRatio(4/3, contentMode: .fit)
+                .overlay(
                     AsyncImage(url: URL(string: post.imageUrl)) { phase in
                         switch phase {
                         case .success(let image):
                             image
                                 .resizable()
                                 .scaledToFill()
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 280)
-                                .clipped()
                         case .failure(_):
-                            Rectangle()
-                                .fill(themeManager.isDarkMode ? Color.white.opacity(0.05) : Color.black.opacity(0.05))
-                                .frame(height: 280)
-                                .overlay(
-                                    VStack {
-                                        Image(systemName: "photo")
-                                            .font(.largeTitle)
-                                            .foregroundColor(.secondary)
-                                        Text("Failed to load image")
-                                            .font(.caption)
-                                            .foregroundColor(.secondary)
-                                    }
-                                )
+                            ZStack {
+                                themeManager.isDarkMode ? Color(white: 0.1) : Color(white: 0.9)
+                                VStack {
+                                    Image(systemName: "photo")
+                                        .font(.largeTitle)
+                                        .foregroundColor(.secondary)
+                                    Text("Failed to load")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
                         case .empty:
-                            Rectangle()
-                                .fill(themeManager.isDarkMode ? Color.white.opacity(0.05) : Color.black.opacity(0.05))
-                                .frame(height: 280)
-                                .overlay(ProgressView())
+                            ZStack {
+                                themeManager.isDarkMode ? Color(white: 0.1) : Color(white: 0.9)
+                                ProgressView()
+                            }
                         @unknown default:
                             EmptyView()
                         }
                     }
+                )
+                .clipped()
+                .frame(maxWidth: .infinity)
+            
+            // Content
+            VStack(alignment: .leading, spacing: 10) {
+                // Title & Description
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(post.title)
+                        .font(.headline)
+                        .foregroundColor(themeManager.primaryTextColor)
+                        .lineLimit(1)
                     
-                    // Content Section
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text(post.title)
-                                .font(.system(size: 20, weight: .bold, design: .rounded))
-                                .foregroundColor(themeManager.isDarkMode ? .white : .black)
-                            
-                            Spacer()
-                            
-                            Text(formatDate(post.createdAt))
-                                .font(.system(size: 12))
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        Text(post.description)
-                            .font(.system(size: 15))
-                            .foregroundColor(themeManager.isDarkMode ? .white.opacity(0.8) : .black.opacity(0.8))
-                            .lineLimit(3)
-                            .fixedSize(horizontal: false, vertical: true)
-                        
-                        Divider()
-                            .padding(.vertical, 4)
-                        
-                        HStack {
-                            HStack(spacing: 8) {
-                                Circle()
-                                    .fill(LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                    .frame(width: 24, height: 24)
-                                    .overlay(
-                                        Text(post.users?.username.prefix(1).uppercased() ?? "?")
-                                            .font(.system(size: 12, weight: .bold))
-                                            .foregroundColor(.white)
-                                    )
-                                
-                                Text(post.users?.username ?? "Unknown Explorer")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .foregroundColor(.blue)
-                            }
-                            
-                            Spacer()
-                            
-                            // Like Button
-                        Button(action: toggleLike) {
-                            HStack(spacing: 4) {
-                                Image(systemName: isLiked ? "heart.fill" : "heart")
-                                    .foregroundColor(isLiked ? .red : .secondary)
-                                if likeCount > 0 {
-                                    Text("\(likeCount)")
-                                        .font(.system(size: 12))
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .padding(4)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                            
-                            // Comment Button
-                            Button(action: { showComments.toggle() }) {
-                                HStack(spacing: 4) {
-                                    Image(systemName: "bubble.right")
-                                        .foregroundColor(.secondary)
-                                    if commentCount > 0 {
-                                        Text("\(commentCount)")
-                                            .font(.system(size: 12))
-                                            .foregroundColor(.secondary)
-                                    }
-                                }
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .padding(16)
-                    // Removed .background(...) here, relying on ZStack background
+                    Text(post.description)
+                        .font(.body)
+                        .foregroundColor(themeManager.primaryTextColor.opacity(0.9))
+                        .lineLimit(3)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                
+                Divider()
+                    .background(themeManager.secondaryTextColor.opacity(0.2))
+                
+                // Actions
+                HStack(spacing: 20) {
+                    Button(action: toggleLike) {
+                        HStack(spacing: 6) {
+                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                                .font(.system(size: 20))
+                                .foregroundColor(isLiked ? .red : themeManager.primaryTextColor)
+                                .scaleEffect(isLiked ? 1.1 : 1.0)
+                                .animation(.spring(response: 0.3), value: isLiked)
+                            
+                            if likeCount > 0 {
+                                Text("\(likeCount)")
+                                    .font(.subheadline)
+                                    .foregroundColor(themeManager.primaryTextColor)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 8)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Button(action: { showComments.toggle() }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "bubble.right")
+                                .font(.system(size: 20))
+                                .foregroundColor(themeManager.primaryTextColor)
+                            
+                            if commentCount > 0 {
+                                Text("\(commentCount)")
+                                    .font(.subheadline)
+                                    .foregroundColor(themeManager.primaryTextColor)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 8)
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Spacer()
+                }
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.05), lineWidth: 1)
-            )
-            .sheet(isPresented: $showComments, onDismiss: {
-                fetchCounts()
-                fetchLikeStatus()
-            }) {
-                UserPostCommentsView(post: post)
-                    .environmentObject(themeManager)
-                    .environmentObject(authManager)
-            }
-            .onAppear {
+            .padding(12)
+        }
+        .background(themeManager.cardBackgroundColor)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(themeManager.isDarkMode ? Color.white.opacity(0.1) : Color.black.opacity(0.05), lineWidth: 1)
+        )
+        .frame(maxWidth: .infinity)
+        .sheet(isPresented: $showComments, onDismiss: {
+            // Re-sync on dismiss
+            hasUserInteracted = false
+            fetchLikeStatus()
+            fetchCounts()
+        }) {
+            UserPostCommentsView(post: post)
+                .environmentObject(themeManager)
+                .environmentObject(authManager)
+        }
+        .onAppear {
+            if !hasUserInteracted {
                 fetchLikeStatus()
                 fetchCounts()
             }
         }
+    }
         
         private func fetchLikeStatus() {
             guard let userId = authManager.userId else { return }
@@ -169,23 +182,14 @@ struct UserPostCard: View {
         private func fetchCounts() {
             Task {
                 do {
-                    async let likeCountResponse = APIService.shared.getUserPostLikeCount(postId: post.id)
-                    async let commentCountResponse = APIService.shared.getUserPostCommentCount(postId: post.id)
-                    
-                    let (likes, comments) = try await (likeCountResponse, commentCountResponse)
+                    let likeCountResponse = try await APIService.shared.getUserPostLikeCount(postId: post.id)
+                    let commentCountResponse = try await APIService.shared.getUserPostCommentCount(postId: post.id)
                     
                     await MainActor.run {
-                        // Only update like count if user hasn't interacted, to avoid jumps
-                        // Or trust server count but adjust for local toggle?
-                        // Simpler: Just update counts, but respect isLiked state
                         if !hasUserInteracted {
-                            self.likeCount = likes.count
-                        } else {
-                            // If user interacted, our local count is more 'current' roughly speaking
-                            // But server count might include OTHER users.
-                            // Ideally we merge them. For now, let's just stick to local cached count if interacted
+                            self.likeCount = likeCountResponse.count
                         }
-                        self.commentCount = comments.count
+                        self.commentCount = commentCountResponse.count
                     }
                 } catch {
                     print("Error fetching counts: \(error)")
@@ -195,9 +199,10 @@ struct UserPostCard: View {
         
         private func toggleLike() {
             guard let userId = authManager.userId else { return }
-            print("❤️ Toggling like. Current state: \(isLiked)")
             
+            // Flag interaction
             hasUserInteracted = true
+            
             let wasLiked = isLiked
             let previousCount = likeCount
             
@@ -209,23 +214,29 @@ struct UserPostCard: View {
             
             Task {
                 do {
+                    // Slight debounce
+                    try await Task.sleep(nanoseconds: 50_000_000) // 0.05s
+                    
                     if wasLiked {
                         _ = try await APIService.shared.unlikeUserPost(userId: userId, postId: post.id)
                     } else {
                         _ = try await APIService.shared.likeUserPost(userId: userId, postId: post.id)
                     }
                 } catch {
-                    print("Error toggling like: \(error)")
-                    // Revert on error
+                    print("Error toggling like: \(error). Validating state...")
+                    
+                    // Instead of blind revert, we un-flag and re-fetch.
+                    // This allows the server truth to correct us, 
+                    // managing cases where we were out of sync or 409 duplicated.
                     await MainActor.run {
-                        self.isLiked = wasLiked
-                        self.likeCount = previousCount
-                        self.hasUserInteracted = false // Reset interaction flag on revert
+                        self.hasUserInteracted = false 
                     }
+                    // Fetch real status
+                    self.fetchLikeStatus()
+                    self.fetchCounts()
                 }
             }
         }
-        
         private func formatDate(_ dateString: String) -> String {
             let formatter = ISO8601DateFormatter()
             formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]

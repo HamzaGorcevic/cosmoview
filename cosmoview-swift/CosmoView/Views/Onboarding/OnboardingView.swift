@@ -9,43 +9,51 @@ struct OnboardingInfo: Identifiable {
 
 struct OnboardingView: View {
     @EnvironmentObject var authManager: AuthenticationManager
+    @EnvironmentObject var themeManager: ThemeManager
     
     @State private var currentPage = 0
     @State private var isCompleting = false
     
     let pages: [OnboardingInfo] = [
         OnboardingInfo(
-            title: "Join the Cosmos",
-            description: "View the Astronomy Picture of the Day directly from NASA.",
-            imageName: "star.fill"
+            title: "Explore the Universe",
+            description: "Discover the Astronomy Picture of the Day directly from NASA.",
+            imageName: "safari.fill" // Safer icon for Explore
         ),
         OnboardingInfo(
-            title: "Test Knowledge",
-            description: "Take daily AI-generated quizzes and climb the leaderboard.",
-            imageName: "lightbulb.fill"
+            title: "Join the Community",
+            description: "Share your thoughts, create posts, and connect with fellow astronomy enthusiasts.",
+            imageName: "globe.americas.fill"
+        ),
+        OnboardingInfo(
+            title: "Test Your Knowledge",
+            description: "Challenge yourself with AI-generated quizzes and community-created tests.",
+            imageName: "brain.head.profile"
+        ),
+        OnboardingInfo(
+            title: "Curate Collection",
+            description: "Save your favorite cosmic views and build your personal gallery.",
+            imageName: "star.fill"
         )
     ]
     
     var body: some View {
         ZStack {
-            // Gradient Background
-            LinearGradient(
-                gradient: Gradient(colors: [Color.black, Color(red: 0.1, green: 0.0, blue: 0.3)]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            // Dynamic Background
+            themeManager.backgroundColor
+                .ignoresSafeArea()
             
             VStack {
-                
                 TabView(selection: $currentPage) {
                     ForEach(0..<pages.count, id: \.self) { index in
                         OnboardingPageView(info: pages[index])
+                            .environmentObject(themeManager) // Explicitly pass to ensure update inside TabView
                             .tag(index)
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
                 .animation(.easeInOut, value: currentPage)
+                .indexViewStyle(.page(backgroundDisplayMode: .always)) // Makes dots more visible
                 
                 // Bottom Controls
                 VStack(spacing: 20) {
@@ -70,6 +78,7 @@ struct OnboardingView: View {
                             .background(
                                 LinearGradient(colors: [.purple, .blue], startPoint: .leading, endPoint: .trailing)
                             )
+                            .foregroundColor(.white) // Ensure text is white despite theme
                             .cornerRadius(12)
                             .shadow(color: .purple.opacity(0.5), radius: 10, x: 0, y: 5)
                         }
@@ -84,7 +93,7 @@ struct OnboardingView: View {
                         }) {
                             Text("Next")
                                 .fontWeight(.semibold)
-                                .foregroundColor(.white)
+                                .foregroundColor(themeManager.primaryTextColor)
                         }
                     }
                 }
@@ -98,7 +107,6 @@ struct OnboardingView: View {
         isCompleting = true
         do {
             try await authManager.completeOnboarding(userId: user.id)
-            // No need to set isCompleting = false because view will dismiss
         } catch {
             print("Failed to complete onboarding: \(error)")
             isCompleting = false
@@ -108,6 +116,7 @@ struct OnboardingView: View {
 
 struct OnboardingPageView: View {
     let info: OnboardingInfo
+    @EnvironmentObject var themeManager: ThemeManager
     
     var body: some View {
         VStack(spacing: 20) {
@@ -124,12 +133,12 @@ struct OnboardingPageView: View {
             
             Text(info.title)
                 .font(.system(size: 32, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
+                .foregroundColor(themeManager.primaryTextColor)
                 .multilineTextAlignment(.center)
             
             Text(info.description)
                 .font(.body)
-                .foregroundColor(.gray)
+                .foregroundColor(themeManager.secondaryTextColor)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
             

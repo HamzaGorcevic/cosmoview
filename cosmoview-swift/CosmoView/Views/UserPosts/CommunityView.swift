@@ -9,12 +9,32 @@ struct CommunityView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                themeManager.isDarkMode ? Color.black.ignoresSafeArea() : Color.white.ignoresSafeArea()
+                themeManager.backgroundColor.ignoresSafeArea()
                 
-                Group {
-                    if isLoading {
+                VStack(spacing: 0) {
+                    // Custom Header
+                    HStack {
+                        Text("Community")
+                            .font(.system(size: 34, weight: .bold, design: .rounded))
+                            .foregroundColor(themeManager.primaryTextColor)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "globe.americas.fill")
+                            .font(.title)
+                            .foregroundStyle(
+                                LinearGradient(colors: [.blue, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
+                            )
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                    .background(themeManager.backgroundColor)
+                    
+                    if isLoading && posts.isEmpty {
+                        Spacer()
                         ProgressView("Loading community posts...")
-                            .foregroundColor(themeManager.isDarkMode ? .white : .black)
+                            .tint(themeManager.primaryTextColor)
+                        Spacer()
                     } else if let errorMessage {
                         VStack {
                             Text(errorMessage)
@@ -26,28 +46,32 @@ struct CommunityView: View {
                         }
                     } else if posts.isEmpty {
                         VStack(spacing: 20) {
+                            Spacer()
                             Image(systemName: "globe.americas.fill")
                                 .font(.system(size: 60))
-                                .foregroundColor(.blue)
+                                .foregroundStyle(themeManager.secondaryTextColor)
                             
                             Text("No posts yet")
                                 .font(.title2)
                                 .fontWeight(.semibold)
-                                .foregroundColor(themeManager.isDarkMode ? .white : .black)
+                                .foregroundColor(themeManager.primaryTextColor)
                             
                             Text("Be the first to share something with the community!")
-                                .foregroundColor(.secondary)
+                                .foregroundColor(themeManager.secondaryTextColor)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal)
+                            Spacer()
                         }
                     } else {
                         ScrollView {
-                            LazyVStack(spacing: 25) {
+                            LazyVStack(spacing: 24) {
                                 ForEach(posts) { post in
                                     UserPostCard(post: post)
+                                        .padding(.horizontal, 16) // Padding applied to card container
                                 }
                             }
-                            .padding()
+                            .padding(.top, 10)
+                            .padding(.bottom, 100) // Extra padding for bottom tab bar
                         }
                         .refreshable {
                             fetchAllPosts()
@@ -55,7 +79,7 @@ struct CommunityView: View {
                     }
                 }
             }
-            .navigationTitle("Community")
+            .navigationBarHidden(true) // We use custom header
             .onAppear {
                 fetchAllPosts()
             }
