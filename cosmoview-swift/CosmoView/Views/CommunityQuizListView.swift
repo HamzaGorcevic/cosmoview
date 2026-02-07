@@ -121,6 +121,18 @@ struct CommunityQuizCard: View {
                         )
                     }
                 }
+                
+                if quiz.creatorId == userId {
+                    Button(action: {
+                        viewModel.deleteQuiz(quizId: quiz.id)
+                    }) {
+                        Image(systemName: "trash.fill")
+                            .foregroundColor(.red)
+                            .padding(8)
+                            .background(Color.red.opacity(0.1))
+                            .clipShape(Circle())
+                    }
+                }
             }
             
             // Question
@@ -262,13 +274,38 @@ struct CreateQuizView: View {
                     Section(header: Text("Question")) {
                         TextField("Enter your question", text: $viewModel.newQuestion)
                             .foregroundColor(themeManager.primaryTextColor)
+                            .padding(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(viewModel.questionError ? Color.red : Color.clear, lineWidth: 1)
+                            )
                     }
                     
                     Section(header: Text("Options")) {
                         TextField("Option 1", text: $viewModel.newOption1)
+                            .padding(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(viewModel.optionErrors[0] ? Color.red : Color.clear, lineWidth: 1)
+                            )
                         TextField("Option 2", text: $viewModel.newOption2)
+                            .padding(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(viewModel.optionErrors[1] ? Color.red : Color.clear, lineWidth: 1)
+                            )
                         TextField("Option 3", text: $viewModel.newOption3)
+                            .padding(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(viewModel.optionErrors[2] ? Color.red : Color.clear, lineWidth: 1)
+                            )
                         TextField("Option 4", text: $viewModel.newOption4)
+                            .padding(8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(viewModel.optionErrors[3] ? Color.red : Color.clear, lineWidth: 1)
+                            )
                     }
                     
                     Section(header: Text("Correct Answer")) {

@@ -296,4 +296,8 @@ class APIService {
         ]
         return try await request(endpoint: APIConfig.Endpoints.submitCommunityQuiz, method: "POST", body: body)
     }
+
+    func deleteCommunityQuiz(quizId: String) async throws -> APIResponse<String> {
+        return try await request(endpoint: APIConfig.Endpoints.communityQuiz + "/\(quizId)", method: "DELETE")
+    }
 }

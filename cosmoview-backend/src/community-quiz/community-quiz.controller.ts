@@ -26,4 +26,9 @@ export class CommunityQuizController {
   submit(@Body() body: { userId: string; quizId: string; answer: string }) {
     return this.communityQuizService.submitAnswer(body.userId, body.quizId, body.answer);
   }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.communityQuizService.remove(id);
+  }
 }

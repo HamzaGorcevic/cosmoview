@@ -124,4 +124,17 @@ export class CommunityQuizService {
 
     return { status: true, correct: isCorrect, points: isCorrect ? 5 : 0 };
   }
+
+  async remove(id: string) {
+    const { error } = await this.supabaseService.getClient()
+      .from('community_quizzes')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      this.logger.error(`Error deleting quiz ${id}`, error);
+      throw error;
+    }
+    return { status: true, message: 'Quiz deleted successfully' };
+  }
 }
