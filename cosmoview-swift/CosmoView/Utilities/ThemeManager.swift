@@ -17,7 +17,11 @@ class ThemeManager: ObservableObject {
     }
     
     var cardBackgroundColor: Color {
-        isDarkMode ? Color(white: 0.15) : Color.white
+        if isDarkMode {
+            return Color.white.opacity(0.06)
+        } else {
+            return Color.white
+        }
     }
     
     var primaryTextColor: Color {

@@ -9,14 +9,50 @@ struct CommunityView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                themeManager.backgroundColor.ignoresSafeArea()
+                ZStack {
+                    // Base gradient
+                    LinearGradient(
+                        colors: themeManager.isDarkMode ? [
+                            Color(red: 0.05, green: 0.05, blue: 0.2),
+                            Color(red: 0.0, green: 0.0, blue: 0.1)
+                        ] : [
+                            Color(red: 0.95, green: 0.95, blue: 1.0),
+                            Color(red: 0.9, green: 0.9, blue: 1.0)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .ignoresSafeArea()
+
+                    // Soft top highlight for depth
+                    LinearGradient(
+                        colors: [Color.white.opacity(themeManager.isDarkMode ? 0.06 : 0.15), .clear],
+                        startPoint: .top,
+                        endPoint: .center
+                    )
+                    .ignoresSafeArea()
+
+                    // Subtle vignette in dark mode
+                    if themeManager.isDarkMode {
+                        RadialGradient(
+                            colors: [.clear, Color.black.opacity(0.4)],
+                            center: .center,
+                            startRadius: 0,
+                            endRadius: 900
+                        )
+                        .blendMode(.multiply)
+                        .ignoresSafeArea()
+                    }
+                }
                 
                 VStack(spacing: 0) {
                     // Custom Header
                     HStack {
                         Text("Community")
                             .font(.system(size: 34, weight: .bold, design: .rounded))
-                            .foregroundColor(themeManager.primaryTextColor)
+                            .foregroundStyle(
+                                LinearGradient(colors: [themeManager.primaryTextColor, themeManager.accentColor.opacity(0.8)], startPoint: .leading, endPoint: .trailing)
+                            )
                         
                         Spacer()
                         
@@ -28,7 +64,7 @@ struct CommunityView: View {
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 10)
-                    .background(themeManager.backgroundColor)
+                    .background(Color.clear)
                     
                     if isLoading && posts.isEmpty {
                         Spacer()

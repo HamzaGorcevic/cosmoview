@@ -138,6 +138,7 @@ class CommunityQuizViewModel: ObservableObject {
                 if let index = self.quizzes.firstIndex(where: { $0.id == quizId }) {
                     self.quizzes.remove(at: index)
                 }
+                
             } catch {
                 self.errorMessage = "Failed to delete quiz: \(error.localizedDescription)"
             }

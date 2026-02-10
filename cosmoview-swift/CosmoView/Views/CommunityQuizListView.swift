@@ -1,17 +1,47 @@
+import UIKit
 import SwiftUI
+
+private enum QuizFilter: String, CaseIterable, Identifiable {
+    case all = "All"
+    case unanswered = "Unanswered"
+    case mine = "Mine"
+    var id: String { rawValue }
+}
 
 struct CommunityQuizListView: View {
     @StateObject private var viewModel = CommunityQuizViewModel()
     @EnvironmentObject var authManager: AuthenticationManager
     @EnvironmentObject var themeManager: ThemeManager
     @State private var showCreateSheet = false
-    
+    @State private var filter: QuizFilter = .all
+
+    private var filteredQuizzes: [CommunityQuiz] {
+        switch filter {
+        case .all:
+            return viewModel.quizzes
+        case .unanswered:
+            return viewModel.quizzes.filter { $0.attempted != true }
+        case .mine:
+            return viewModel.quizzes.filter { $0.creatorId == (authManager.userId ?? "") }
+        }
+    }
+
     var body: some View {
         NavigationView {
             ZStack {
                 // Dynamic Background
-                themeManager.backgroundColor
-                    .ignoresSafeArea()
+                LinearGradient(
+                    colors: themeManager.isDarkMode ? [
+                        Color(red: 0.05, green: 0.05, blue: 0.2),
+                        Color(red: 0.0, green: 0.0, blue: 0.1)
+                    ] : [
+                        Color(red: 0.95, green: 0.95, blue: 1.0),
+                        Color(red: 0.9, green: 0.9, blue: 1.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
                 
                 VStack {
                     if viewModel.isLoading {
@@ -28,15 +58,56 @@ struct CommunityQuizListView: View {
                             Text("Be the first to create one!")
                                 .foregroundColor(themeManager.secondaryTextColor)
                                 .font(.subheadline)
+                            Button(action: { showCreateSheet = true }) {
+                                HStack {
+                                    Image(systemName: "plus.circle.fill")
+                                    Text("Create Quiz")
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 10)
+                                .background(
+                                    LinearGradient(colors: [.blue, .purple], startPoint: .leading, endPoint: .trailing)
+                                )
+                                .cornerRadius(12)
+                                .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
+                            }
                         }
                     } else {
-                        ScrollView {
-                            LazyVStack(spacing: 20) {
-                                ForEach(viewModel.quizzes) { quiz in
-                                    CommunityQuizCard(quiz: quiz, viewModel: viewModel, userId: authManager.userId ?? "")
+                        VStack(spacing: 12) {
+                            // Filter & Count Header
+                            HStack {
+                                Picker("Filter", selection: $filter) {
+                                    ForEach(QuizFilter.allCases) { option in
+                                        Text(option.rawValue).tag(option)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                            }
+                            .padding(.horizontal)
+
+                            HStack {
+                                Text("\(filteredQuizzes.count) \(filteredQuizzes.count == 1 ? "Quiz" : "Quizzes")")
+                                    .font(.caption)
+                                    .foregroundColor(themeManager.secondaryTextColor)
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+
+                            ScrollView {
+                                LazyVStack(spacing: 20) {
+                                    ForEach(filteredQuizzes) { quiz in
+                                        CommunityQuizCard(quiz: quiz, viewModel: viewModel, userId: authManager.userId ?? "")
+                                    }
+                                }
+                                .padding()
+                            }
+                            .refreshable {
+                                if let userId = authManager.userId {
+                                    viewModel.fetchQuizzes(userId: userId)
                                 }
                             }
-                            .padding()
                         }
                     }
                 }
@@ -121,6 +192,17 @@ struct CommunityQuizCard: View {
                         )
                     }
                 }
+                else {
+                    Text("New")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .foregroundColor(themeManager.accentColor)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule().fill(themeManager.accentColor.opacity(0.15))
+                        )
+                }
                 
                 if quiz.creatorId == userId {
                     Button(action: {
@@ -131,6 +213,7 @@ struct CommunityQuizCard: View {
                             .padding(8)
                             .background(Color.red.opacity(0.1))
                             .clipShape(Circle())
+                            .shadow(color: .red.opacity(0.2), radius: 4, x: 0, y: 2)
                     }
                 }
             }
@@ -139,13 +222,17 @@ struct CommunityQuizCard: View {
             Text(quiz.question)
                 .font(.title3)
                 .fontWeight(.bold)
-                .foregroundColor(themeManager.primaryTextColor)
+                .foregroundStyle(
+                    LinearGradient(colors: [themeManager.primaryTextColor, themeManager.accentColor.opacity(0.8)], startPoint: .leading, endPoint: .trailing)
+                )
                 .padding(.vertical, 4)
             
             // Options
             VStack(spacing: 12) {
                 ForEach(quiz.options, id: \.self) { option in
                     Button(action: {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                         if quiz.attempted != true && viewModel.selectedQuizId == nil {
                             viewModel.submitAnswer(userId: userId, quizId: quiz.id, answer: option)
                         }
@@ -169,6 +256,8 @@ struct CommunityQuizCard: View {
                                         .stroke(getBorderColor(for: option), lineWidth: 1)
                                 )
                         )
+                        .scaleEffect((viewModel.selectedQuizId == quiz.id && viewModel.selectedAnswer == option) ? 0.98 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.8), value: viewModel.selectedAnswer)
                     }
                     .disabled((quiz.attempted == true) || (viewModel.selectedQuizId != nil && viewModel.selectedQuizId == quiz.id))
                 }
@@ -177,7 +266,30 @@ struct CommunityQuizCard: View {
         .padding(20)
         .background(themeManager.cardBackgroundColor)
         .cornerRadius(24)
+        .overlay(
+            RoundedRectangle(cornerRadius: 24)
+                .stroke(
+                    LinearGradient(colors: [themeManager.accentColor.opacity(0.5), .clear], startPoint: .topLeading, endPoint: .bottomTrailing),
+                    lineWidth: 1
+                )
+        )
+        .overlay(alignment: .topTrailing) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(themeManager.accentColor.opacity(0.4))
+                .padding(12)
+                .opacity(0.15)
+        }
         .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+        .overlay(
+            Group {
+                if viewModel.isSubmitting && viewModel.selectedQuizId == quiz.id {
+                    RoundedRectangle(cornerRadius: 24)
+                        .fill(Color.black.opacity(0.05))
+                        .overlay(ProgressView().tint(themeManager.accentColor))
+                }
+            }
+        )
     }
     
     // MARK: - Helper Functions
@@ -271,6 +383,10 @@ struct CreateQuizView: View {
                 themeManager.backgroundColor.ignoresSafeArea()
                 
                 Form {
+                    Section(footer: Text("Share a fun space question with the community. Keep it clear and concise.").font(.footnote).foregroundColor(.gray)) {
+                        EmptyView()
+                    }
+                    
                     Section(header: Text("Question")) {
                         TextField("Enter your question", text: $viewModel.newQuestion)
                             .foregroundColor(themeManager.primaryTextColor)
@@ -334,16 +450,26 @@ struct CreateQuizView: View {
                             Spacer()
                             if viewModel.isCreating {
                                 ProgressView()
+                                    .tint(.white)
                             } else {
-                                Text("Post Quiz")
-                                    .fontWeight(.bold)
+                                HStack(spacing: 8) {
+                                    Image(systemName: "paperplane.fill")
+                                    Text("Post Quiz")
+                                        .fontWeight(.bold)
+                                }
                             }
                             Spacer()
                         }
+                        .padding(.vertical, 8)
+                        .foregroundColor(.white)
+                        .background(
+                            LinearGradient(colors: [.blue, .purple], startPoint: .leading, endPoint: .trailing)
+                        )
+                        .cornerRadius(10)
+                        .shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 3)
                     }
                     .disabled(viewModel.isCreating)
-                    .listRowBackground(themeManager.accentColor)
-                    .foregroundColor(.white)
+                    .listRowBackground(Color.clear)
                 }
                 .scrollContentBackground(.hidden)
             }
@@ -354,3 +480,4 @@ struct CreateQuizView: View {
         }
     }
 }
+
