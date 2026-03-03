@@ -173,10 +173,8 @@ struct QuizView: View {
                     dismissButton: .default(Text("OK")) {
                         if result.correct {
                            authManager.currentUser = authManager.currentUser.map { user in
-                               var updatedUser = user
                                let newPoints = (user.totalPoints ?? 0) + result.points
-                               // This is a local hack to update UI immediately, ideally verify with backend fetch
-                               return User(id: user.id, username: user.username, email: user.email, totalPoints: newPoints, createdAt: user.createdAt, updatedAt: user.updatedAt)
+                               return User(id: user.id, username: user.username, email: user.email, totalPoints: newPoints, hasCompletedOnboarding: user.hasCompletedOnboarding, createdAt: user.createdAt, updatedAt: user.updatedAt)
                            }
                         }
                         // Refresh to show "Completed" state
@@ -198,3 +196,4 @@ struct QuizView: View {
         return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }
+
